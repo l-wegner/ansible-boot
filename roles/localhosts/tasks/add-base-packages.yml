@@ -1,0 +1,35 @@
+- name: add base packages
+  package:
+    name:
+      - openssh
+      - sshpass
+      - sudo
+      - networkmanager
+      - tmux
+      - vim
+      - zip
+      - unzip
+- name: update /etc/sudoers
+  replace:
+    path: /etc/sudoers
+    regexp: "^# (%wheel ALL=\\(ALL:ALL\\) ALL)$"
+    replace: "\\1"
+
+- name: enable NetworkManager.service
+  systemd:
+    name: NetworkManager.service
+    state: started
+    enabled: true
+
+- name: enable sshd.service
+  systemd:
+    name: sshd.service
+    state: started
+    enabled: true
+
+
+- name: alias vim as vi via softlink
+  file:
+    src: /usr/bin/vim
+    dest: /usr/bin/vi
+    state: link

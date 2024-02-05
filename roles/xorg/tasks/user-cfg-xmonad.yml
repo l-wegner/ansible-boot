@@ -1,0 +1,73 @@
+  - name: config xmonad
+    block:
+    - name: create ~/.config/xmonad/lib
+      file:
+        path: "{{ userhome }}/.config/xmonad/lib"
+        state: directory
+    - name: link xmonad config
+      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      file: 
+        src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
+        dest: "{{ userhome }}/.xmonad/xmonad.hs"
+        state: link
+    - name: change config folder path to XDG_HOME_CONFIG folder (ubuntu)
+      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      replace:
+        path: "{{ userhome }}/.xmonad/xmonad.hs"
+        regexp: "\"\\.config/xmonad/"
+        replace: "\".xmonad/"
+    - name: link keyboard layout script 
+      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      file: 
+        src: "{{ dot_files }}/home/.xmonad/switch-kb-layout.sh"
+        dest: "{{ userhome }}/.xmonad/switch-kb-layout.sh"
+        state: link
+    - name: link MyUtils.hs
+      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      file:
+        src: "{{ dot_files }}/home/.xmonad/lib/MyUtils.hs"
+        dest: "{{ userhome }}/.xmonad/lib/MyUtils.hs"
+        state: link
+    - name: link MyTest.hs
+      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      file:
+        src: "{{ dot_files }}/home/.xmonad/lib/MyTest.hs"
+        dest: "{{ userhome }}/.xmonad/lib/MyTest.hs"
+        state: link
+    - name: update xmonad config for newer version (arch)
+      when: ansible_distribution == 'Arch' or ansible_distribution == 'Archlinux'
+      block:
+      - name: link ~/.xmonad/xmonad.hs from dotfiles
+#        copy:
+#          src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
+#          dest: "{{ userhome }}/.config/xmonad/xmonad.hs"
+#          mode: 0644
+        file:
+          src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
+          dest: "{{ userhome }}/.config/xmonad/xmonad.hs"
+          state: link
+#      - name: change compositor from compton to picom (arch)
+#        replace:
+#          path: "{{ userhome }}/.config/xmonad/xmonad.hs"
+#          regexp: "^(\\s*spawnOnce \")compton &(\")"
+#          replace: "\\1picom &\\2"
+      - name: change config folder path to XDG_HOME_CONFIG folder (arch)
+        replace:
+          path: "{{ userhome }}/.config/xmonad/xmonad.hs"
+          regexp: "\"\\.xmonad/"
+          replace: "\".config/xmonad/"
+      - name: link keyboard layout script (arch)
+        file: 
+          src: "{{ dot_files }}/home/.xmonad/switch-kb-layout.sh"
+          dest: "{{ userhome }}/.config/xmonad/switch-kb-layout.sh"
+          state: link
+      - name: link MyUtils.hs (arch)
+        file:
+          src: "{{ dot_files }}/home/.xmonad/lib/MyUtils.hs"
+          dest: "{{ userhome }}/.config/xmonad/lib/MyUtils.hs"
+          state: link
+      - name: link MyTest.hs (arch)
+        file:
+          src: "{{ dot_files }}/home/.xmonad/lib/MyTest.hs"
+          dest: "{{ userhome }}/.config/xmonad/lib/MyTest.hs"
+          state: link

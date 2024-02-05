@@ -1,0 +1,18 @@
+  - name: config alacritty 
+    block:
+    - name: create ~/.config/alacritty
+      file:
+        path: "{{ userhome }}/.config/alacritty"
+        state: directory
+    - name: link alacritty config
+      file: 
+        src: "{{ dot_files }}/home/.config/alacritty/alacritty.yml"
+        dest: "{{ userhome }}/.config/alacritty/alacritty.yml"
+        state: link
+    - name: link alacritty record term config
+      file: 
+        src: "{{ dot_files }}/home/.config/alacritty/record-term.yml"
+        dest: "{{ userhome }}/.config/alacritty/record-term.yml"
+        state: link
+
+

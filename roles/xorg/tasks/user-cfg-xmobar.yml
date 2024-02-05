@@ -1,0 +1,16 @@
+  - name: config xmobar
+    block:
+    - name: create ~/.config/xmobar
+      file:
+        path: "{{ userhome }}/.config/xmobar"
+        state: directory
+    - name: link xmobar config
+      file: 
+        src: "{{ dot_files }}/home/.config/xmobar/xmobarrc"
+        dest: "{{ userhome }}/.config/xmobar/xmobarrc"
+        state: link
+    - name: link keyboard layout script 
+      file: 
+        src: "{{ dot_files }}/home/.config/xmobar/trayer-padding-icon.sh"
+        dest: "{{ userhome }}/.config/xmobar/trayer-padding-icon.sh"
+        state: link

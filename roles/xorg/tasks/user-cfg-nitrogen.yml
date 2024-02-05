@@ -1,0 +1,15 @@
+  - name: config nitrogen
+    vars:
+      nitrogen_cfg: "{{ q('first_found', ansible_distribution +'/bg-saved.cfg', errors='ignore') }}" 
+    when: nitrogen_cfg is iterable and nitrogen_cfg | length > 0
+    block:
+      - name: create ~/.config/nitrogen
+        file:
+          path: "{{ userhome }}/.config/nitrogen"
+          state: directory
+      - name: copy nitrogen cfg
+        copy:
+          src: "{{ nitrogen_cfg | first }}"
+          dest: "{{userhome}}/.config/nitrogen/bg-saved.cfg"
+          force: yes
+          mode: 0644

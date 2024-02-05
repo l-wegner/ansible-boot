@@ -1,0 +1,11 @@
+localhost ansible_connection=local
+
+
+[all:vars]
+ansible_user=root
+new_ansible_user=toor
+golang_version=1.21.2
+golang_sha256=f5414a770e5e11c6e9674d4cd4dd1f4f630e176d1828d3427ea8ca4211eee90d
+dot_files_repo=git@github.com:l-wegner/dotfiles.git
+git_user="Lars Wegner"
+git_email="lars.wegner.devs@gmail.com"

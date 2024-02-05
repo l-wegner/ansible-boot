@@ -1,0 +1,7 @@
+- name: install xorg 
+  import_tasks: xorg.yml
+
+
+- name: install keepassx
+  import_tasks: install-keepassxc.yml
+

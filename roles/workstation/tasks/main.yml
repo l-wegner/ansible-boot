@@ -1,0 +1,23 @@
+- name: install git
+  import_tasks: install-git.yml
+
+- name: install curl
+  become: true
+  package:
+    name: 
+      - curl
+
+- name: install keepassx
+  import_tasks: install-keepassxc.yml
+
+- name: install go
+  import_tasks: install-go.yml
+
+- name: install flatpak
+  import_tasks: install-flatpak.yml
+
+- name: install app image launcher
+  import_tasks: install-app-image-launcher.yml
+
+- name: install terraform
+  import_tasks: install-terraform.yml

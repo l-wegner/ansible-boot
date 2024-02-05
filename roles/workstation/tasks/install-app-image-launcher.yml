@@ -1,0 +1,22 @@
+- name: install appimagelauncher (Ubuntu)
+  block:
+    - name: Add keepass ppa
+      apt_repository:
+        repo: ppa:appimagelauncher-team/stable
+        state: present
+    - name: apt update
+      apt:
+        update_cache: true
+      changed_when: false
+    - name: install appimagelauncher
+      become: true
+      package:
+        name: appimagelauncher
+  when: ansible_distribution == 'Ubuntu'
+
+- name: install appimagelauncher (Arch)
+  fail:
+    msg: AUR not supported - appimagelauncher not installed
+  when: ansible_distribution == 'Arch'
+
+

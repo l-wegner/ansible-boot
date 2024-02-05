@@ -1,0 +1,53 @@
+- name: add user group
+  become: true
+  when: lookup('ansible.builtin.env','USER_NM')|length>0 
+  group:
+    name: "{{ lookup('ansible.builtin.env','USER_NM') }}"
+    gid: 1000
+
+- name: add ansible group
+  become: true
+  when: lookup('ansible.builtin.env','TOOR_PW_HASH')|length>0 
+  group:
+    name: ansible 
+    gid: 1001
+
+- name: add user
+  become: true
+  when: lookup('ansible.builtin.env','USER_PW_HASH')|length>0 
+  user:
+    name: "{{ lookup('ansible.builtin.env','USER_NM') }}"
+    comment: Lars
+    uid: 1000
+    group: "{{ lookup('ansible.builtin.env','USER_NM') }}"
+    password: "{{ lookup('ansible.builtin.env','USER_PW_HASH') }}"
+    generate_ssh_key: true
+    ssh_key_file: ".ssh/id_ed25519"
+    ssh_key_comment: "{{ lookup('ansible.builtin.env','USER_NM') }}@{{ ansible_hostname }}"
+    ssh_key_type: "ed25519"
+    groups:
+      - 'wheel'
+- name: clone dotfiles
+  become: true
+  when: lookup('ansible.builtin.env','USER_NM')|length>0 
+  vars:
+    home: "/home/{{ lookup('ansible.builtin.env','USER_NM') }}"
+  ansible.builtin.git:
+    repo: "{{ dot_files_repo }}"
+    dest: "{{ home }}/dotfiles_dup"
+    accept_hostkey: true
+- name: add ansible user
+  become: true
+  when: lookup('ansible.builtin.env','TOOR_PW_HASH')|length>0 
+  user:
+    name: toor
+    uid: 1001
+    comment: Ansible User
+    group: ansible
+    password: "{{ lookup('ansible.builtin.env','TOOR_PW_HASH') }}"
+    generate_ssh_key: true
+    ssh_key_file: ".ssh/id_ed25519"
+    ssh_key_comment: "toor@{{ ansible_hostname }}"
+    ssh_key_type: "ed25519"
+    groups:
+      - 'wheel'

@@ -1,0 +1,34 @@
+  - name: config rofi
+    block:
+    - name: create ~/.config/rofi
+      file:
+        path: "{{ userhome }}/.config/rofi"
+        state: directory
+    - name: link rofi config
+      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      file: 
+        src: "{{ dot_files }}/home/.config/rofi/config.rasi"
+        dest: "{{ userhome }}/.config/rofi/config.rasi"
+        state: link
+    - name: link rofi theme
+      file: 
+        src: "{{ dot_files }}/home/.config/rofi/mytheme.rasi"
+        dest: "{{ userhome }}/.config/rofi/mytheme.rasi"
+        state: link
+    - name: update rofi config for newer version (arch)
+      when: ansible_distribution == 'Arch' or ansible_distribution == 'Archlinux'
+      block:
+      - name: copy ~/.config/rofi/config.rasi from dotfiles
+        copy:
+          src: "{{ dot_files }}/home/.config/rofi/config.rasi"
+          dest: "{{ userhome }}/.config/rofi/config.rasi"
+          mode: 0644
+      - name: comment out the theme at ~/.config/rofi/config.rasi
+        replace:
+          path: "{{ userhome }}/.config/rofi/config.rasi"
+          regexp: "^(\\s*theme: .+;)$"
+          replace: "/*\\1*/"
+      - name: add theme at the bottom at ~/.config/rofi/config.rasi
+        lineinfile:
+          path: "{{ userhome }}/.config/rofi/config.rasi"
+          line: "@theme \"~/.config/rofi/mytheme.rasi\""

@@ -1,0 +1,8 @@
+- name: clone {{ dot_files_repo }}
+  when: lookup('ansible.builtin.env','USER_NM')|length>0 
+  vars:
+    home: "/home/{{ lookup('env','USER_NM') }}
+  ansible.builtin.git:
+    repo: "{{ dot_files_repo }}"
+    dest: "{{ home }}/dotfiles"
+    accept_hostkey: true

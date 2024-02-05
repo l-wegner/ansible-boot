@@ -1,0 +1,8 @@
+- name: query
+  debug:
+    var: ansible_facts
+- name: install base packages
+  import_tasks: add-base-packages.yml
+- name: add user
+  import_tasks: add-user.yml
+
