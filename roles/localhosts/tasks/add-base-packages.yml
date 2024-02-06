@@ -10,10 +10,16 @@
       - zip
       - unzip
 - name: update /etc/sudoers
-  replace:
-    path: /etc/sudoers
-    regexp: "^# (%wheel ALL=\\(ALL:ALL\\) ALL)$"
-    replace: "\\1"
+  block:
+    - name: enable wheel
+      replace:
+        path: /etc/sudoers
+        regexp: "^# (%wheel ALL=\\(ALL:ALL\\) ALL)$"
+        replace: "\\1"
+    - name: enable no pw for group ansible
+      lineinfile:
+        path: "/etc/sudoers.d/01_ansible"
+        line: "%ansible ALL=(ALL:ALL) NOPASSWD: ALL"
 
 - name: enable NetworkManager.service
   systemd:
