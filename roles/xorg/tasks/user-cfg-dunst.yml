@@ -1,10 +1,10 @@
   - name: config dunst
     block:
-    - name: create ~/.config/xmobar
+    - name: create ~/.config/dunst
       file:
         path: "{{ userhome }}/.config/dunst"
         state: directory
-    - name: link xmobar config
+    - name: link dunst config
       file: 
         src: "{{ dot_files }}/home/.config/dunst/dunstrc"
         dest: "{{ userhome }}/.config/dunst/dunstrc"
