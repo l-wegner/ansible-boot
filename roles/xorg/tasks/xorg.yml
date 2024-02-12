@@ -72,6 +72,8 @@
       - ttf-freefont
       - ttf-liberation 
       - ttf-droid
+  register: install_xmonad_result
+  changed_when: install_xmonad_result.packages | length > 0
 
 - name: set xmonad as default session
   replace:
@@ -123,6 +125,8 @@
             #- thunar-media-tags-plugin
           - thunar-volman
           - polkit
+      register: install_filemanager_result
+      changed_when: install_filemanager_result.packages | length > 0
     - name: add rules for mounting
       copy:
         src: "polkit-50-udiskie.rules"
@@ -138,6 +142,7 @@
         src: "udev-61-hide-local-partition.rules"
         dest: "/etc/udev/rules.d/61-hide-local-partition.rules"
         mode: 0644
+
 - name: config user
   when: lookup('ansible.builtin.env','USER_NM')|length>0 and dotfiles.stat.exists
   vars:
