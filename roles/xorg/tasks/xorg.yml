@@ -79,11 +79,11 @@
     regexp:  "^# (session)=/usr/bin/startlxde.*$"
     replace: "\\1=/usr/bin/xmonad"
 
-- name: hide toor from lxdm 
-  replace:
-    path: /etc/lxdm/lxdm.conf
-    regexp:  "^(black=)$"
-    replace: "\\1toor"
+- name: Hide 'toor' from ldxm
+  become: yes
+  vars:
+    ignored_user: "toor"
+  import_tasks: lxdm-ignore-user.yml
 
 - name: enable lxdm.service
   systemd:

@@ -16,9 +16,7 @@
         path: /etc/sudoers
         regexp: "^# (%wheel ALL=\\(ALL:ALL\\) ALL)$"
         replace: "\\1"
-      create: yes
-      mode: 0644
-      validate: 'visudo -cf %s'
+        validate: 'visudo -cf %s'
     - name: enable no pw for group ansible
       lineinfile:
         path: "/etc/sudoers.d/01_ansible"

@@ -1,0 +1,22 @@
+- name: Hide '{{ ignored_user }}' from ldxm
+  become: yes
+  block:
+    - name: Check if '{{ ignored_user }}' is contained
+      shell: "sed -n 's/^black=//p' /etc/lxdm/lxdm.conf | sed -n '/\\b{{ ignored_user }}\\b/!p'"
+      register: list_without
+      failed_when: false
+      changed_when: false
+
+    - name: Check if list is empty
+      shell: "sed -n 's/^black=//p' /etc/lxdm/lxdm.conf"
+      register: list_empty
+      failed_when: false
+      changed_when: false
+
+    - name: Append '{{ ignored_user }}' if necessary
+      lineinfile:
+        path: /etc/lxdm/lxdm.conf
+        regexp: '^black='
+        line: 'black={{ list_without.stdout | default("", true) }}{{ "," if list_without.stdout else "" }}{{ ignored_user }}'
+        insertafter: "\\[userlist\\]"
+      when: list_without.stdout != '' or list_empty.stdout == ''
