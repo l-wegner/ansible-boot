@@ -17,6 +17,6 @@
       lineinfile:
         path: /etc/lxdm/lxdm.conf
         regexp: '^black='
-        line: 'black={{ list_without.stdout | default("", true) }}{{ "," if list_without.stdout else "" }}{{ ignored_user }}'
+        line: 'black={{ list_without.stdout | default("", true) }}{{ " " if list_without.stdout else "" }}{{ ignored_user }}'
         insertafter: "\\[userlist\\]"
       when: list_without.stdout != '' or list_empty.stdout == ''
