@@ -1,44 +1,48 @@
 - name: add base packages
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  vars:
+    distro_packages:
+      'Arch':
+        networkmanager: 'networkmanager'
+      'Archlinux':
+        networkmanager: 'networkmanager'
+      'Ubuntu':
+        networkmanager: 'network-manager'
   package:
     name:
-      - openssh
-      - sshpass
       - sudo
-      - networkmanager
+      - "{{ distro_packages[ansible_distribution]['networkmanager'] | default ('') }}"  # network manager
       - tmux
       - vim
       - zip
       - unzip
-- name: update /etc/sudoers
-  block:
-    - name: enable wheel
-      replace:
-        path: /etc/sudoers
-        regexp: "^# (%wheel ALL=\\(ALL:ALL\\) ALL)$"
-        replace: "\\1"
-        validate: 'visudo -cf %s'
-    - name: enable no pw for group ansible
-      lineinfile:
-        path: "/etc/sudoers.d/01_ansible"
-        line: "%ansible ALL=(ALL:ALL) NOPASSWD: ALL"
-        create: yes
-        mode: 0644
-        validate: 'visudo -cf %s'
+
+- name: add sshd packages
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  package:
+    name:
+      - openssh
+      - sshpass
+  tags: [ 'never','sshd' ]
+
 
 - name: enable NetworkManager.service
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   systemd:
     name: NetworkManager.service
     state: started
     enabled: true
 
 - name: enable sshd.service
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   systemd:
     name: sshd.service
     state: started
     enabled: true
-
+  tags: [ 'never','sshd' ]
 
 - name: alias vim as vi via softlink
+  when: ansible_distribution in [ 'Arch', 'Archlinux' ]
   file:
     src: /usr/bin/vim
     dest: /usr/bin/vi
