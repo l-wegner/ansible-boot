@@ -1,4 +1,4 @@
-localhost ansible_connection=local
+my_workstation ansible_connection=local
 
 
 [all:vars]

@@ -1,12 +1,31 @@
-- name: enable multilib repo (Arch)
-  replace:
-    dest: /etc/pacman.conf
-    regexp: "#(\\s*\\[multilib\\]\\s*\n#\\s*Include\\s+=\\s+/etc/pacman.d/mirrorlist)"
-    backup: yes
-    replace: |
-      [multilib]
-      Include = /etc/pacman.d/mirrorlist
-- name: install nvidia and xmonad
+- name: install nvidia
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  tags: [ 'never', 'nvidia' ]
+  args:
+    force_apt_get: true
+  vars:
+    distro_packages:
+      'Arch':
+        gpu_driver:
+      'Archlinux':
+        gpu_driver: 'nvidia'
+        gpu_driver_utils: 'lib32-nvidia-utils'
+        vulkan32: 'lib32-nvidia-utils'
+      'Ubuntu':
+        gpu_driver:
+  package:
+    update_cache: true
+    name:
+      # gpu driver
+      - "{{ distro_packages[ansible_distribution]['gpu_driver'] | default ('') }}"
+      - "{{ distro_packages[ansible_distribution]['gpu_driver_utils'] | default ('') }}" # gpu driver utils
+      - "{{ distro_packages[ansible_distribution]['vulkan32'] | default ('') }}"  # 32bit vulkan driver
+
+
+- name: install xmonad
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  args:
+    force_apt_get: true
   vars:
     distro_packages:
       'Arch':
@@ -14,84 +33,94 @@
       'Archlinux':
         haskell_nw_info: 'haskell-network-info'
         haskell_hostname: 'haskell-hostname'
-        vulkan32: 'lib32-nvidia-utils'
+        nm_applet: 'network-manager-applet'
         wallpaper: 'archlinux-wallpaper'
         notify_daemon: 'dunst'
+        login_manager: 'lxdm'
+        xmonad_contrib: 'xmonad-contrib'
+        compositor: 'picom'
+        xorg: 'xorg-server'
+        alsa_pulse_bridge: 'pulseaudio-alsa'
+        xev: 'xorg-xev'
       'Ubuntu':
         haskell_nw_info: 'libghc-network-info-dev'
         haskell_hostname: 'libghc-hostname-dev'
-        nm_applet: 'nm-applet'
-
-    wallpaper_dict:
-      'Arch': 'archlinux-wallpaper'
-      'Archlinux': 'archlinux-wallpaper'
-    nm_applet_dict:
-      'Ubuntu': 'nm-applet'
-    vulkan32_dict:
-      'Archlinux': 'lib32-nvidia-utils'
-    haskell_nw_info_dict:
-      'ArchLinux': 'haskell-network-info'
-      'Ubuntu': 'libghc-network-info-dev'
-    haskell_hostname_dict:
-      'ArchLinux': 'haskell-hostname'
-      'Ubuntu': 'libghc-hostname-dev'
+        nm_applet: 'network-manager-gnome'
+        wallpaper: 'ubuntu-wallpapers'
+        login_manager: 'gdm3'
+        xmonad_contrib: 'libghc-xmonad-contrib-dev'
+        compositor: 'compton'
+        xorg: 'xorg'
+        notify_daemon: 'gnome-shell-extension-appindicator'
+        alsa_pulse_bridge: 'libasound2'
+        xev: 'x11-utils'
   package:
     update_cache: true
     name:
-      - xorg-server
-      - xterm # required for xmonad default config
-      - lxdm # login screen
-      - nvidia  
-      - "{{ distro_packages[ansible_distribution]['vulkan32'] | default ('') }}"  # 32bit vulkan driver
-      - lib32-nvidia-utils
+      - "{{ distro_packages[ansible_distribution]['xorg'] | default ('') }}"
+      # required for xmonad default config
+      - xterm
+      # login screen
+      - "{{ distro_packages[ansible_distribution]['login_manager'] | default ('') }}"
       - arandr # convenient gui for setting resolution
       - xmonad # tiling window manager
-      - xmonad-contrib # lib with features for xmonad
+      - "{{ distro_packages[ansible_distribution]['haskell_hostname'] | default ('') }}" # lib with features for xmonad
       - "{{ distro_packages[ansible_distribution]['haskell_hostname'] | default ('') }}"  # haskell Network.Hostname
       - "{{ distro_packages[ansible_distribution]['haskell_nw_info'] | default ('') }}"  # haskell Network.Info
-      - xmobar # panel for xmonad - todo improve config
+      - xmobar # panel for xmonad
       - "{{ distro_packages[ansible_distribution]['notify_daemon'] | default ('') }}"  # notification server
       - scrot # do screenshots
       - playerctl # cli to control media player
       - xdotool # for automating key presses in xmobar
       - xclip # clipboard for x session
-      - rofi # application launcher - todo improve config
+      - rofi # application launcher
       - hoogle # haskell api search
-      - picom # compton replacement
-      - nitrogen # for wallpapers - todo improve config
+      - "{{ distro_packages[ansible_distribution]['compositor'] | default ('') }}" # compositor
+      - nitrogen # for wallpapers
       - "{{ distro_packages[ansible_distribution]['wallpaper'] | default ('') }}"  # wallpapers
-      - "{{ distro_packages[ansible_distribution]['nm_applet'] | default ('') }}"  # networkmanager tray icon
+      # networkmanager tray icon
+      - "{{ distro_packages[ansible_distribution]['nm_applet'] | default ('') }}"
       - pasystray # pulse audio tray icon
       - pavucontrol # pulse audio volume control
       - pulseaudio
-      - pulseaudio-alsa
-      - alacritty # terminal
+      - "{{ distro_packages[ansible_distribution]['alsa_pulse_bridge'] | default ('') }}"
       - firefox
       - trayer # system tray
-      - xorg-xev # debug x events
+      # debug x events
+      - "{{ distro_packages[ansible_distribution]['xev'] | default ('') }}"
+  register: install_packages_result
+#  changed_when:  install_packages_result.packages | length > 0
+
+- name: install additional arch packages (FIXME)
+  when: ansible_distribution in ['Arch', 'Archlinux']
+  package:
+    update_cache: true
+    name:
       - ttf-freefont
-      - ttf-liberation 
+      - ttf-liberation
       - ttf-droid
-  register: install_xmonad_result
-  changed_when: install_xmonad_result.packages | length > 0
 
-- name: set xmonad as default session
-  replace:
-    path: /etc/lxdm/lxdm.conf
-    regexp:  "^# (session)=/usr/bin/startlxde.*$"
-    replace: "\\1=/usr/bin/xmonad"
+- name: install alacritty
+  import_tasks: install-alacritty.yml
 
-- name: Hide 'toor' from ldxm
-  become: yes
-  vars:
-    ignored_user: "toor"
-  import_tasks: lxdm-ignore-user.yml
+- name: config lxdm
+  import_tasks: config-lxdm.yml
 
-- name: enable lxdm.service
-  systemd:
-    name: lxdm.service
-    state: started
-    enabled: true
+- name: isntall thunar
+  import_tasks: install-thunar.yml
+
+#- name: Set changed condition based on package manager
+# FIXME
+#  set_fact:
+#    packages_installed: "{{ install_packages_result.packages | default([]) }}"
+#    cache_updated: "{{ install_packages_result.cache_update }}"
+#    changed_when:
+#      - packages_installed | length > 0
+#      - cache_updated is defined and cache_updated == True
+#      - ansible_pkg_mgr == 'pacman'  # Check if pacman was used
+#      - packages_installed is not defined and cache_updated == True
+
+
 
 
 - name: Set profile to default-release in firefox.desktop
@@ -99,6 +128,7 @@
     default_firefox_profile: "default-release"
   replace:
     path: /usr/share/applications/firefox.desktop
+    # todo fixme regex is broken
     regexp: '^((xoxoExec=)(?!.*-P {{ default_firefox_profile }}.*))'
     replace: '\1 -P {{ default_firefox_profile }}'
 
@@ -109,41 +139,10 @@
   stat:
     path: "/home/{{user}}/dotfiles"
   register: dotfiles
-
-
-
-- name: install file manager
-  when: ansible_distribution in ['Arch', 'Archlinux']
-  block:
-    - name: install file manager packages
-      package:
-        update_cache: true
-        name:
-          - gvfs
-          - thunar
-          - thunar-archive-plugin
-            #- thunar-media-tags-plugin
-          - thunar-volman
-          - polkit
-      register: install_filemanager_result
-      changed_when: install_filemanager_result.packages | length > 0
-    - name: add rules for mounting
-      copy:
-        src: "polkit-50-udiskie.rules"
-        dest: "/etc/polkit-1/rules.d/50-udiskie.rules"
-        mode: 0644
-    - name: add log rule
-      copy:
-        src: "polkit-00-log-access.rules"
-        dest: "/etc/polkit-1/rules.d/00-log-access.rules"
-        mode: 0644
-    - name: hide some local partions
-      copy:
-        src: "udev-61-hide-local-partition.rules"
-        dest: "/etc/udev/rules.d/61-hide-local-partition.rules"
-        mode: 0644
+  tags: [ 'never' ]
 
 - name: config user
+  tags: [ 'never' ]
   when: lookup('ansible.builtin.env','USER_NM')|length>0 and dotfiles.stat.exists
   vars:
     user: "{{ lookup('ansible.builtin.env','USER_NM') }}"
@@ -153,19 +152,21 @@
   become_user: "{{ user }}"
   block:
   - name: config alacritty
-#    when: "'Arch' in ansible_distribution"
     import_tasks: user-cfg-alacritty.yml
 
   - name: config rofi
+    # todo improve config
     import_tasks: user-cfg-rofi.yml
 
   - name: config xmonad
     import_tasks: user-cfg-xmonad.yml
 
   - name: config xmobar
+    # todo improve config
     import_tasks: user-cfg-xmobar.yml
   
   - name: config nitrogen
+    # todo improve config
     import_tasks: user-cfg-nitrogen.yml
 
   - name: config dunst

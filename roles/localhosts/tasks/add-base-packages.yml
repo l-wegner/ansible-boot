@@ -1,3 +1,12 @@
+- name: enable multilib repo (Arch)
+  when: ansible_distribution in [ 'Archlinux' ]
+  replace:
+    dest: /etc/pacman.conf
+    regexp: "#(\\s*\\[multilib\\]\\s*\n#\\s*Include\\s+=\\s+/etc/pacman.d/mirrorlist)"
+    backup: yes
+    replace: |
+      [multilib]
+      Include = /etc/pacman.d/mirrorlist
 - name: add base packages
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   vars:

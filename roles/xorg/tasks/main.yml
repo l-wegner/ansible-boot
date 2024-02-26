@@ -1,7 +1,9 @@
-- name: install xorg 
-  import_tasks: xorg.yml
+- vars:
+    user: "{{ lookup('env','USER_NM') }}"
+  block:
+  - name: install xorg
+    import_tasks: xorg.yml
 
-
-- name: install keepassx
-  import_tasks: install-keepassxc.yml
+  - name: install keepassx
+    import_tasks: install-keepassxc.yml
 

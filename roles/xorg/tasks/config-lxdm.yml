@@ -1,0 +1,31 @@
+- name: Check if lxdm is used
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  stat:
+    path: /etc/lxdm/lxdm.conf
+  register: lxdm_conf_check_result
+- name: configure lxdm
+  when: lxdm_conf_check_result.stat.exists
+  block:
+    - name: set xmonad as default session
+      replace:
+        path: /etc/lxdm/lxdm.conf
+        regexp:  "^# (session)=/usr/bin/startlxde.*$"
+        replace: "\\1=/usr/bin/xmonad"
+
+    - name: Hide ansible user from ldxm
+      become: yes
+      vars:
+        ignored_user: "{{ new_ansible_user }}"
+      import_tasks: lxdm-ignore-user.yml
+
+    - name: Hide 'app_builder' from ldxm
+      become: yes
+      vars:
+        ignored_user: "app_builder"
+      import_tasks: lxdm-ignore-user.yml
+
+    - name: enable lxdm.service
+      systemd:
+        name: lxdm.service
+        state: started
+        enabled: true

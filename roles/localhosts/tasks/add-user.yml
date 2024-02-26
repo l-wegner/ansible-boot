@@ -12,6 +12,12 @@
     name: ansible 
     gid: "{{ ansible_gid | int }}"
 
+- name: add app_builder group
+  become: true
+  when: "ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]"
+  group:
+    name: app_builder
+
 - name: add ansible user
   become: true
   when: "add_ansible and ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]"
@@ -45,6 +51,13 @@
     groups:
       - 'wheel'
 
+- name: Create the `app_builder` user
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  ansible.builtin.user:
+    name: app_builder
+    create_home: yes
+    group: app_builder
+    shell: /bin/bash
 
 - name: update /etc/sudoers
   block:
@@ -58,6 +71,14 @@
       lineinfile:
         path: "/etc/sudoers.d/01_ansible"
         line: "%ansible ALL=(ALL:ALL) NOPASSWD: ALL"
+        create: yes
+        mode: 0644
+        validate: 'visudo -cf %s'
+    - name: Allow the `app_builder` user to run `sudo pacman` without a password
+      when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+      lineinfile:
+        path: /etc/sudoers.d/11-install-app_builder
+        line: 'app_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
         create: yes
         mode: 0644
         validate: 'visudo -cf %s'

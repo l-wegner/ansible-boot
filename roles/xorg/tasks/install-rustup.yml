@@ -1,0 +1,53 @@
+- name: Check if .cargo directory exists in home directory
+  stat:
+    path: "/home/{{ rust_user }}/.cargo"
+  register: rustup_directory
+  become_user: "{{ rust_user }}"
+  become: yes
+- name: Download and install Rustup if .rustup directory doesn't exist
+  get_url:
+    url: "https://sh.rustup.rs"
+    dest: "/tmp/rustup-init.sh"
+    mode: '0755'
+  become_user: "{{ rust_user }}"
+  become: yes
+  when: not rustup_directory.stat.exists
+- name: Run Rustup initialization script
+  command: "/tmp/rustup-init.sh -y"
+  become_user: "{{ rust_user }}"
+  become: yes
+  args:
+    creates: "/home/{{ rust_user }}/.cargo/bin/cargo"  # Ensures idempotence
+  when: not rustup_directory.stat.exists
+
+- name: Set Rust environment variables for bash
+  lineinfile:
+    dest: "/home/{{ rust_user }}/.bashrc"
+    line: "source $HOME/.cargo/env"
+    create: yes
+  become_user: "{{ rust_user }}"
+  when: not rustup_directory.stat.exists
+
+- name: Set Rust environment variables for zsh
+  lineinfile:
+    dest: "/home/{{ rust_user }}/.zshrc"
+    line: "source $HOME/.cargo/env"
+    create: yes
+  become_user: "{{ rust_user }}"
+  when: not rustup_directory.stat.exists
+
+- name: Set default Rust version and update
+  shell: |
+    export PATH="/home/{{ rust_user }}/.cargo/bin:$PATH"
+    rustup default stable && rustup update
+  become_user: "{{ rust_user }}"
+  become: yes
+
+#- name: install rustup.yml
+#  shell: |
+#    sh -c "$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)" "" -y
+#    source "/home/{{ rust_user }}/.cargo/env"
+#    rustup default stable
+#    rustup update
+#  become_user: "{{ rust_user }}"
+#  when: not ( rustup.stat.exists and rustup.stat.isdir )

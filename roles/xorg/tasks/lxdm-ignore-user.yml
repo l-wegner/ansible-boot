@@ -1,5 +1,11 @@
+- name: Check if lxdm is used to ignore '{{ ignored_user }}'
+  stat:
+    path: /etc/lxdm/lxdm.conf
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  register: lxdm_conf_exists_result
 - name: Hide '{{ ignored_user }}' from ldxm
   become: yes
+  when: lxdm_conf_exists_result.stat.exists and ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   block:
     - name: Check if '{{ ignored_user }}' is contained
       shell: "sed -n 's/^black=//p' /etc/lxdm/lxdm.conf | sed -n '/\\b{{ ignored_user }}\\b/!p'"

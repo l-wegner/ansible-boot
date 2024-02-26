@@ -1,0 +1,38 @@
+- name: install aur tooling (arch)
+  when: ansible_distribution in ['Arch', 'Archlinux']
+  block:
+    - name: Check if paru is already installed
+      become: yes
+      become_user: "{{ user }}"
+      command: "paru --version"
+      register: paru_check
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Install paru if not already installed
+      when: paru_check.rc != 0
+      block:
+        - name: Install base-devel package group
+          become: yes
+          pacman:
+            name: base-devel
+            state: present
+        - name: Clone paru from GitHub
+          git:
+            repo: "https://aur.archlinux.org/paru.git"
+            dest: "/tmp/paru"
+            clone: yes
+        - name: Build and install paru
+          command: "makepkg -si --noconfirm"
+          args:
+            chdir: "/tmp/paru"
+    - name: Clean up temporary paru directory
+      when: paru_check.rc != 0
+      file:
+        path: "/tmp/paru"
+        state: absent
+
+    - name: Install kewlfft.aur collection if not already installed
+      command: ansible-galaxy collection install kewlfft.aur
+      args:
+        creates: "~/.ansible/collections/ansible_collections/kewlfft/aur"

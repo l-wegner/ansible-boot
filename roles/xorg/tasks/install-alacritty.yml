@@ -1,0 +1,25 @@
+- name: Install alacritty (Arch)
+  when: ansible_distribution in ['Arch', 'Archlinux']
+  package:
+    update_cache: true
+    name:
+      - alacritty
+
+- name: Install alacritty (Ubuntu 20.04)
+  when: ansible_distribution in ['Ubuntu']
+  block:
+    - name: install dependencies
+      package:
+        update_cache: true
+        name:
+          - cmake
+          - pkg-config
+          - libfreetype6-dev
+          - libfontconfig1-dev
+          - libxcb-xfixes0-dev
+          - libxkbcommon-dev
+          - python3
+    - name: install rustup for app_builder
+      vars:
+        rust_user: "app_builder"
+      import_tasks: install-rustup.yml

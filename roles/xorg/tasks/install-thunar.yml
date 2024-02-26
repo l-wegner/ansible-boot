@@ -1,0 +1,30 @@
+- name: install file manager
+  when: ansible_distribution in ['Arch', 'Archlinux']
+  block:
+    - name: install file manager packages
+      package:
+        update_cache: true
+        name:
+          - gvfs
+          - thunar
+          - thunar-archive-plugin
+          #- thunar-media-tags-plugin
+          - thunar-volman
+          - polkit
+      register: install_filemanager_result
+      changed_when: install_filemanager_result.packages | length > 0
+    - name: add rules for mounting
+      copy:
+        src: "polkit-50-udiskie.rules"
+        dest: "/etc/polkit-1/rules.d/50-udiskie.rules"
+        mode: 0644
+    - name: add log rule
+      copy:
+        src: "polkit-00-log-access.rules"
+        dest: "/etc/polkit-1/rules.d/00-log-access.rules"
+        mode: 0644
+    - name: hide some local partions
+      copy:
+        src: "udev-61-hide-local-partition.rules"
+        dest: "/etc/udev/rules.d/61-hide-local-partition.rules"
+        mode: 0644

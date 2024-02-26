@@ -15,4 +15,6 @@
     import_tasks: add-base-packages.yml
   - name: add user
     import_tasks: add-user.yml
+  - name: install paru
+    import_tasks: install-paru.yml
 

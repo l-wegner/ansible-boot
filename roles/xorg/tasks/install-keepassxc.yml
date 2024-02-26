@@ -1,4 +1,6 @@
 - name: Add ppa (Ubuntu)
+  when: ansible_distribution in [ 'Ubuntu' ]
+  become: yes
   block:
   - name: Add keepass ppa
     apt_repository:
@@ -8,11 +10,12 @@
     apt:
       update_cache: true
     changed_when: false
-  when: ansible_distribution == 'Ubuntu'
 
-- name: install keepassxc 
-  become: true
+- name: install keepassxc
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  become: yes
   package:
     name: 
       - keepassxc
+
 
