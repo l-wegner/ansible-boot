@@ -121,8 +121,6 @@
 #      - packages_installed is not defined and cache_updated == True
 
 
-
-
 - name: Set profile to default-release in firefox.desktop
   vars:
     default_firefox_profile: "default-release"
@@ -139,10 +137,8 @@
   stat:
     path: "/home/{{user}}/dotfiles"
   register: dotfiles
-  tags: [ 'never' ]
 
 - name: config user
-  tags: [ 'never' ]
   when: lookup('ansible.builtin.env','USER_NM')|length>0 and dotfiles.stat.exists
   vars:
     user: "{{ lookup('ansible.builtin.env','USER_NM') }}"
@@ -152,22 +148,36 @@
   become_user: "{{ user }}"
   block:
   - name: config alacritty
+    when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     import_tasks: user-cfg-alacritty.yml
 
   - name: config rofi
+    when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     # todo improve config
     import_tasks: user-cfg-rofi.yml
 
-  - name: config xmonad
+  - name: config xmonad (arch)
+    vars:
+      xmonad_config_dir: "/home/{{ user}}/.config/xmonad"
+    when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+    import_tasks: user-cfg-xmonad.yml
+
+  - name: config xmonad (ubuntu)
+    vars:
+      xmonad_config_dir: "/home/{{ user}}/.xmonad"
+    when: ansible_distribution in [ 'Ubuntu' ]
     import_tasks: user-cfg-xmonad.yml
 
   - name: config xmobar
+    when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     # todo improve config
     import_tasks: user-cfg-xmobar.yml
   
   - name: config nitrogen
+    when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     # todo improve config
     import_tasks: user-cfg-nitrogen.yml
 
   - name: config dunst
+    when: ansible_distribution in [ 'Arch', 'Archlinux' ]
     import_tasks: user-cfg-dunst.yml

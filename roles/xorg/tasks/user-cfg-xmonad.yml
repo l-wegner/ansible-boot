@@ -1,53 +1,34 @@
   - name: config xmonad
+    when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     block:
-    - name: create ~/.config/xmonad/lib
+    - name: "create {{ xmonad_config_dir }}/lib"
       file:
-        path: "{{ userhome }}/.config/xmonad/lib"
+        path: " {{ xmonad_config_dir }}/lib"
         state: directory
-    - name: link xmonad config
-      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
-      file: 
+    - name: link ~/.xmonad/xmonad.hs from dotfiles
+      file:
         src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
-        dest: "{{ userhome }}/.xmonad/xmonad.hs"
+        dest: "{{ xmonad_config_dir }}/xmonad.hs"
         state: link
     - name: change config folder path to XDG_HOME_CONFIG folder (ubuntu)
-      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+      when: ansible_distribution in [ 'Ubuntu' ]
       replace:
         path: "{{ userhome }}/.xmonad/xmonad.hs"
         regexp: "\"\\.config/xmonad/"
         replace: "\".xmonad/"
-    - name: link keyboard layout script 
-      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
-      file: 
+    - name: change config folder path to XDG_HOME_CONFIG folder (arch)
+      when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+      replace:
+        path: "{{ userhome }}/.config/xmonad/xmonad.hs"
+        regexp: "\"\\.xmonad/"
+        replace: "\".config/xmonad/"
+    - name: link keyboard layout script
+      file:
         src: "{{ dot_files }}/home/.xmonad/switch-kb-layout.sh"
-        dest: "{{ userhome }}/.xmonad/switch-kb-layout.sh"
+        dest: "{{ xmonad_config_dir }}/switch-kb-layout.sh"
         state: link
     - name: link MyUtils.hs
-      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
       file:
         src: "{{ dot_files }}/home/.xmonad/lib/MyUtils.hs"
-        dest: "{{ userhome }}/.xmonad/lib/MyUtils.hs"
+        dest: "{{ xmonad_config_dir }}/lib/MyUtils.hs"
         state: link
-    - name: update xmonad config for newer version (arch)
-      when: ansible_distribution == 'Arch' or ansible_distribution == 'Archlinux'
-      block:
-      - name: link ~/.xmonad/xmonad.hs from dotfiles
-        file:
-          src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
-          dest: "{{ userhome }}/.config/xmonad/xmonad.hs"
-          state: link
-      - name: change config folder path to XDG_HOME_CONFIG folder (arch)
-        replace:
-          path: "{{ userhome }}/.config/xmonad/xmonad.hs"
-          regexp: "\"\\.xmonad/"
-          replace: "\".config/xmonad/"
-      - name: link keyboard layout script (arch)
-        file: 
-          src: "{{ dot_files }}/home/.xmonad/switch-kb-layout.sh"
-          dest: "{{ userhome }}/.config/xmonad/switch-kb-layout.sh"
-          state: link
-      - name: link MyUtils.hs (arch)
-        file:
-          src: "{{ dot_files }}/home/.xmonad/lib/MyUtils.hs"
-          dest: "{{ userhome }}/.config/xmonad/lib/MyUtils.hs"
-          state: link

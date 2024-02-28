@@ -4,10 +4,20 @@
       file:
         path: "{{ userhome }}/.config/alacritty"
         state: directory
-    - name: link alacritty config
+    - name: link alacritty config yml
       file: 
         src: "{{ dot_files }}/home/.config/alacritty/alacritty.yml"
         dest: "{{ userhome }}/.config/alacritty/alacritty.yml"
+        state: link
+    - name: link alacritty config toml
+      file:
+        src: "{{ dot_files }}/home/.config/alacritty/alacritty.toml"
+        dest: "{{ userhome }}/.config/alacritty/alacritty.toml"
+        state: link
+    - name: link alacritty recording terminal config toml
+      file:
+        src: "{{ dot_files }}/home/.config/alacritty/record-term.toml"
+        dest: "{{ userhome }}/.config/alacritty/record-term.toml"
         state: link
     - name: link alacritty record term config
       file: 

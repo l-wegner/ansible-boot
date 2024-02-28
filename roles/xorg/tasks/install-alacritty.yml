@@ -4,6 +4,8 @@
     update_cache: true
     name:
       - alacritty
+  register: install_alacritty_result
+  changed_when:  install_alacritty_result.packages | length > 0
 
 - name: Install alacritty (Ubuntu 20.04)
   when: ansible_distribution in ['Ubuntu']
@@ -23,3 +25,37 @@
       vars:
         rust_user: "app_builder"
       import_tasks: install-rustup.yml
+    - name: clone alacritty repo
+      become: yes
+      become_user: "app_builder"
+      git:
+        repo: "https://github.com/alacritty/alacritty.git"
+        dest: "/tmp/alacritty"
+        clone: yes
+
+    - name: build alacritty
+      become: yes
+      become_user: "app_builder"
+      shell: |
+        export PATH="/home/{{ user }}/.cargo/bin:$PATH"
+        cargo build --release --no-default-features --features=x11
+      args:
+        chdir: "/tmp/alacritty"
+
+    - name: Copy a new "alacritty" file into place, backing up the original alacritty
+      ansible.builtin.copy:
+        src: /tmp/alacritty/target/release/alacritty
+        dest: "/home/{{ user }}/.local/bin/alacritty"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0755'
+        backup: yes
+
+    - name: copy alacritty to '/home/{{ user }}/.local/bin
+      shell: |
+        sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+        sudo mkdir -p /usr/local/share/man/man1
+        gzip -c extra/alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
+        gzip -c extra/alacritty-msg.man | sudo tee /usr/local/share/man/man1/alacritty-msg.1.gz > /dev/null
+      args:
+        chdir: "/tmp/alacritty"
