@@ -1,0 +1,75 @@
+- name: install neowim (arch)
+  when: ansible_distribution in [  'Arch', 'Archlinux' ]
+  become: yes
+  package:
+    name:
+      - neovim
+      - ripgrep
+- name: install neowim (ubuntu)
+  when: ansible_distribution in [ 'Ubuntu' ]
+  block:
+    - name: install neovim
+      shell:
+        cmd: |
+          curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+          sudo rm -rf /opt/nvim
+          sudo rm /usr/bin/nvim
+          sudo tar -C /opt -xzf nvim-linux64.tar.gz
+          sudo ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim
+        executable: /bin/bash
+        creates: /usr/bin/nvim
+    - name: install rustup for app_builder
+      vars:
+        rust_user: "app_builder"
+      import_tasks: install-rustup.yml
+    - name: install ripgrep (ubuntu)
+      become: yes
+      become_user: "app_builder"
+      git:
+        repo: "https://github.com/BurntSushi/ripgrep"
+        dest: "/tmp/ripgrep"
+        clone: yes
+      register: ripgrep_repo
+#    - name: delete old ripgrep version
+#      when: ripgrep_repo.
+#      file:
+#        path: "/tmp/ripgrep/target/release/rg"
+#        state: absent
+    - name: build ripgrep (ubuntu)
+      become: yes
+      become_user: "app_builder"
+      shell: |
+        export PATH="/home/app_builder/.cargo/bin:$PATH"
+        cargo build --release
+      args:
+        chdir: "/tmp/ripgrep"
+        creates: "/tmp/ripgrep/target/release/rg"
+    - name: Copy a new "ripgrep" file into place, backing up the original ripgrep
+      ansible.builtin.copy:
+        src: /tmp/ripgrep/target/release/rg
+        dest: "{{ userhome }}/.local/bin/rg"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0755'
+        backup: yes
+
+- name: create ~/.config/nvim
+  become: true
+  become_user: "{{ user }}"
+  file:
+    path: "{{ userhome }}/.config/nvim"
+    state: directory
+- name: link neovim init.lua
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "{{ dot_files }}/home/.config/nvim/init.lua"
+    dest: "{{ userhome }}/.config/nvim/init.lua"
+    state: link
+- name: link neovim lua/
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "{{ dot_files }}/home/.config/nvim/lua"
+    dest: "{{ userhome }}/.config/nvim/lua"
+    state: link

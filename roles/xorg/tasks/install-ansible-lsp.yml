@@ -1,0 +1,19 @@
+# https://ansible.readthedocs.io/projects/language-server/#standalone-usage
+- name: install ansible lsp
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  become: yes
+  become_user: "{{ user }}"
+  shell:
+    cmd: |
+      . /home/{{ user }}/.asdf/asdf.sh
+      npm install -g @ansible/ansible-language-server
+    executable: /bin/bash
+
+# https://ansible.readthedocs.io/projects/lint/usage/
+- name: install ansible-lint
+  vars:
+    package_user: "{{ user }}"
+    package_name: "ansible-lint"
+    package_env_name: "ansible-lint"
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  import_tasks: install-in-pip-venv.yml

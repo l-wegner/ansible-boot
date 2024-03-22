@@ -37,7 +37,7 @@
       become: yes
       become_user: "app_builder"
       shell: |
-        export PATH="/home/{{ user }}/.cargo/bin:$PATH"
+        export PATH="/home/app_builder/.cargo/bin:$PATH"
         cargo build --release --no-default-features --features=x11
       args:
         chdir: "/tmp/alacritty"
@@ -45,7 +45,7 @@
     - name: Copy a new "alacritty" file into place, backing up the original alacritty
       ansible.builtin.copy:
         src: /tmp/alacritty/target/release/alacritty
-        dest: "/home/{{ user }}/.local/bin/alacritty"
+        dest: "{{ userhome }}/.local/bin/alacritty"
         owner: "{{ user }}"
         group: "{{ user }}"
         mode: '0755'

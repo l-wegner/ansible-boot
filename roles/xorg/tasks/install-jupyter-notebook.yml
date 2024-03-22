@@ -1,0 +1,5 @@
+- vars:
+    package_user: "{{ user }}"
+    package_name: "jupyter"
+    package_env_name: "jupyter"
+  import_tasks: install-in-pip-venv.yml

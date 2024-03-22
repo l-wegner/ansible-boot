@@ -1,0 +1,74 @@
+- name: install nodejs asdf plugin dependencies
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  become: yes
+  package:
+    name:
+      - dirmngr
+      - gpg
+      - curl
+      - gawk
+
+- name: Install asdf
+  become: yes
+  become_user: "{{ asdf_user }}"
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  block:
+    - name: install asdf dependencies
+      become: yes
+      package:
+        name:
+          - git
+          - curl
+    - name: "install asdf"
+      git:
+        repo: "https://github.com/asdf-vm/asdf.git"
+        dest: "{{ asdf_dir }}"
+        version: "{{ asdf_version }}"
+    - name: "Add asdf to .bashrc"
+      lineinfile:
+        path: "/home/{{ asdf_user }}/.bashrc"
+        line: "{{ item.line }}"
+        create: yes
+      loop:
+        - { line: "### asdf ###" }
+        - { line: ". $HOME/.asdf/asdf.sh" }
+        - { line: ". $HOME/.asdf/completions/asdf.bash" }
+
+    - name: "Add asdf to .zshrc"
+      lineinfile:
+        path: "/home/{{ asdf_user }}/.zshrc"
+        line: ". $HOME/.asdf/asdf.sh"
+        create: yes
+    - name: "Add asdf completions to .zshrc"
+      lineinfile:
+        path: "/home/{{ asdf_user }}/.zshrc"
+        line: "fpath=(${ASDF_DIR}/completions $fpath)"
+        insertbefore: "^autoload"
+        firstmatch: yes
+        create: yes
+    - name: "Initialise completions with ZSH's compinit"
+      lineinfile:
+        path: "/home/{{ asdf_user }}/.zshrc"
+        line: "autoload -Uz compinit && compinit"
+        insertafter: "^fpath"
+        create: yes
+    - name: link asdf .tool-versions
+      file:
+        src: "{{ dot_files }}/home/.tool-versions"
+        dest: "{{ userhome }}/.tool-versions"
+        state: link
+    - name: install asdf plugins
+      when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+      command: "asdf plugin add {{ item.plugin }} {{ item.url }}"
+      environment:
+        PATH: "{{ asdf_dir }}/bin:{{ ansible_env.PATH }}"
+      loop:
+        - { plugin: nodejs, url: "https://github.com/asdf-vm/asdf-nodejs.git" }
+        - { plugin: maven, url: "https://github.com/halcyon/asdf-maven.git" }
+        - { plugin: java, url: "https://github.com/halcyon/asdf-java.git" }
+        - { plugin: yq, url: "https://github.com/sudermanjr/asdf-yq.git" }
+    - name: install asdf tools
+      when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+      command: asdf install
+      environment:
+        PATH: "{{ asdf_dir }}/bin:{{ ansible_env.PATH }}"

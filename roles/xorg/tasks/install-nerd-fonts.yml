@@ -1,0 +1,24 @@
+- name: Install nerd-fonts
+  when: ansible_distribution in ['Arch', 'Archlinux','Ubuntu']
+  become: yes
+  file:
+    path: /usr/local/share/fonts/ttf/nerdfonts
+    state: directory
+    mode: '0555'
+- name: Download fonts
+  become: yes
+  when: ansible_distribution in ['Arch', 'Archlinux','Ubuntu']
+  get_url:
+    dest: /usr/local/share/fonts/ttf/nerdfonts
+    url: "{{ item.url }}"
+    mode: '0444'
+  with_items:
+    - { url: "https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf" }
+    - { url: "https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Retina/FiraCodeNerdFontMono-Retina.ttf" }
+    - { url: "https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/Ubuntu/Regular/UbuntuNerdFont-Regular.ttf" }
+    - { url: "https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/UbuntuMono/Regular/UbuntuMonoNerdFontMono-Regular.ttf" }
+  register: install_nerd_fonts
+- name: Update font-cache
+  when: install_nerd_fonts.changed
+  shell:
+    fc-cache -s

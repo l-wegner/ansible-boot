@@ -1,0 +1,25 @@
+- name: install common packages
+  become: true
+  vars:
+    distro_packages:
+      'Arch':
+        wallpaper: 'archlinux-wallpaper'
+      'Archlinux':
+        wake_on_lan: 'wol'
+        base_devel: 'base-devel'
+      'Ubuntu':
+        wake_on_lan: 'wakeonlan'
+        base_devel: 'build-essential'
+
+  package:
+    name:
+      - curl
+      - jq
+#      FIXME: btop is not available in the official repositories
+#      - btop
+      - "{{ distro_packages[ansible_distribution]['base_devel'] | default ('') }}"
+      - yt-dlp
+      - nnn
+      - zsh
+      - rsync
+      - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"

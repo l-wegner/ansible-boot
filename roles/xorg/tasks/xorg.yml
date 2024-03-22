@@ -101,6 +101,9 @@
       - ttf-liberation
       - ttf-droid
 
+- name: install nerd fonts
+  import_tasks: install-nerd-fonts.yml
+
 - name: install alacritty
   import_tasks: install-alacritty.yml
 
@@ -136,21 +139,21 @@
   vars:
     user: "{{ lookup('ansible.builtin.env','USER_NM') }}"
   stat:
-    path: "/home/{{user}}/dotfiles"
+    path: "{{ dot_files }}"
   register: dotfiles
 
 - name: config user
   when: lookup('ansible.builtin.env','USER_NM')|length>0 and dotfiles.stat.exists
-  vars:
-    user: "{{ lookup('ansible.builtin.env','USER_NM') }}"
-    dot_files: "/home/{{ lookup('ansible.builtin.env','USER_NM') }}/dotfiles" 
-    userhome: "/home/{{ lookup('ansible.builtin.env','USER_NM') }}/"
   become: true
   become_user: "{{ user }}"
   block:
   - name: config alacritty
     when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     import_tasks: user-cfg-alacritty.yml
+
+  - name: config omz
+    when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+    import_tasks: user-cfg-omz.yml
 
   - name: config rofi
     when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
@@ -159,13 +162,13 @@
 
   - name: config xmonad (arch)
     vars:
-      xmonad_config_dir: "/home/{{ user}}/.config/xmonad"
+      xmonad_config_dir: "{{ userhome }}/.config/xmonad"
     when: ansible_distribution in [ 'Arch', 'Archlinux' ]
     import_tasks: user-cfg-xmonad.yml
 
   - name: config xmonad (ubuntu)
     vars:
-      xmonad_config_dir: "/home/{{ user}}/.xmonad"
+      xmonad_config_dir: "{{ userhome }}/.xmonad"
     when: ansible_distribution in [ 'Ubuntu' ]
     import_tasks: user-cfg-xmonad.yml
 

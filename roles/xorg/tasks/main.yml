@@ -1,9 +1,55 @@
 - vars:
-    user: "{{ lookup('env','USER_NM') }}"
+    user: "{{ lookup('ansible.builtin.env','USER_NM') }}"
+    dot_files: "/home/{{ user }}/dotfiles"
+    userhome: "/home/{{ user }}"
   block:
+  - name: install common packages
+    import_tasks: install-common-packages.yml
+
+  - name: update user
+    import_tasks: update-user.yml
+
   - name: install xorg
     import_tasks: xorg.yml
+
+  - name: install oh-my-zsh
+    import_tasks: install-oh-my-zsh.yml
+
+  - name: install rust
+    vars:
+      rust_user: "{{ user }}"
+    block:
+      - import_tasks: install-rustup.yml
+      - import_tasks: install-rust-analyzer.yml
+
+  - name: install go
+    vars:
+      go_user: "{{ user }}"
+    block:
+      - import_tasks: install-go.yml
+      - import_tasks: install-gopls.yml
+
+
+  - name: install asdf
+    vars:
+      asdf_user: "{{ user }}"
+      asdf_dir: "/home/{{ asdf_user }}/.asdf"
+      asdf_cfg: "{{ asdf_dif }}/.asdfrc"
+    block:
+      - import_tasks: install-asdf.yml
+      - import_tasks: install-nodejs.yml
+
+  - name: install ansible lsp
+    import_tasks: install-ansible-lsp.yml
+
+  - name: install helix
+    import_tasks: install-helix.yml
+
+  - name: install neovim
+    import_tasks: install-neovim.yml
 
   - name: install keepassx
     import_tasks: install-keepassxc.yml
 
+  - name: install jupyter notebook
+    import_tasks: install-jupyter-notebook.yml

@@ -1,0 +1,13 @@
+- name: Check if zsh exists
+  stat:
+    path: "/usr/bin/zsh"
+  register: zsh_bin
+- name: "Update {{ user}} groups and shell"
+  become: yes
+  user:
+    name: "{{ user }}"
+    shell: /usr/bin/zsh
+# FIXME wheel is not on every system, do I need storage?
+#    groups: wheel,storage
+    append: yes
+  when: zsh_bin.stat.exists

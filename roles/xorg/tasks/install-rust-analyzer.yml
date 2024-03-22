@@ -1,0 +1,25 @@
+- name: Download and install rust-analyzer
+  when: ansible_distribution in ['Arch', 'Archlinux','Ubuntu']
+  become: yes
+  become_user: "{{ rust_user }}"
+  block:
+    - name: "Ensure ~/.local/bin directory exists"
+      file:
+        path: "/home/{{ rust_user }}/.local/bin"
+        state: directory
+
+    - name: Download and install rust-analyzer
+      get_url:
+        url: "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz"
+        dest: "/tmp/rust-analyzer.gz"
+        mode: '0644'
+
+    - name: Decompress rust-analyzer binary
+      shell: "gunzip -c /tmp/rust-analyzer.gz > /home/{{ rust_user }}/.local/bin/rust-analyzer"
+      args:
+        creates: "/home/{{ rust_user }}/.local/bin/rust-analyzer"
+
+    - name: Make rust-analyzer executable
+      file:
+        path: "/home/{{ rust_user }}/.local/bin/rust-analyzer"
+        mode: '0755'

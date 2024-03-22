@@ -1,21 +1,21 @@
-- name: Add keepass ppa (Ubuntu)
+- name: Add helix ppa (Ubuntu)
   when: ansible_distribution in [ 'Ubuntu' ]
   become: yes
   block:
-    - name: Add keepass ppa
+    - name: Add helix ppa
       apt_repository:
-        repo: ppa:phoerious/keepassxc
+        repo: ppa:maveonair/helix-editor
         state: present
     - name: apt update
       apt:
         update_cache: true
       changed_when: false
 
-- name: install keepassxc
+- name: install helix
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   become: yes
   package:
     name:
-      - keepassxc
+      - helix
 
 

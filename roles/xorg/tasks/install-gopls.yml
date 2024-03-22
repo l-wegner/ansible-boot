@@ -1,0 +1,12 @@
+- name: Install gopls
+  become: yes
+  become_user: "{{ go_user }}"
+  shell:
+    executable: /bin/bash
+    cmd: |
+      . /etc/profile
+      GOPATH=/home/{{ go_user }}/git/go-lib go install golang.org/x/tools/gopls@latest
+    creates: "/home/{{ go_user }}/git/go-lib/bin/gopls"
+  environment:
+    PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
+    GOPATH: "/home/{{ go_user }}/git/go-lib"
