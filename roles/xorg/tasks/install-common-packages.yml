@@ -23,3 +23,8 @@
       - zsh
       - rsync
       - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
+      - tmux
+
+
+- name: install tmux
+  import_tasks: user-cfg-tmux.yml

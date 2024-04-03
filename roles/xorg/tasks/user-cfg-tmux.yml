@@ -1,0 +1,8 @@
+- name: config tmux
+  block:
+    - name: link .tmux.conf
+      when: ansible_distribution in ['Arch', 'Archlinux', 'Ubuntu']
+      file:
+        src: "{{ dot_files }}/home/.tmux.conf"
+        dest: "{{ userhome }}/.tmux.conf"
+        state: link
