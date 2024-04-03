@@ -1,5 +1,5 @@
-- name: install nodejs asdf plugin dependencies
-  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+- name: install nodejs asdf plugin dependencies (Ubuntu)
+  when: ansible_distribution in [ 'Ubuntu' ]
   become: yes
   package:
     name:
@@ -8,6 +8,14 @@
       - curl
       - gawk
 
+- name: install nodejs asdf plugin dependencies (Arch)
+  when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+  become: yes
+  package:
+    name:
+      - gnupg
+      - curl
+      - gawk
 - name: Install asdf
   become: yes
   become_user: "{{ asdf_user }}"
