@@ -34,7 +34,7 @@
   command: "make --directory=/usr/share/doc/git/contrib/credential/libsecret"
   args:
     creates: /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
-  when:  ansible_distribution in  ['Ubuntu', 'Archlinux']
+  when:  ansible_distribution in  ['Ubuntu']
 - name: Register Git credential helper
   become: true
   become_user: "{{ user }}"
