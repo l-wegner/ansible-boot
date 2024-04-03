@@ -1,0 +1,42 @@
+- name: Install git and libsecret (Ubuntu)
+  become: true
+  package:
+    name:
+      - git
+      - libsecret-1-0
+      - libsecret-1-dev
+    state: present
+  when: ansible_distribution in  ['Ubuntu']
+
+- name: Install lazygit (Ubuntu)
+  become: true
+  shell:
+    cmd: |
+      LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+      curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+      tar xf lazygit.tar.gz lazygit
+      sudo install lazygit /usr/local/bin
+    creates:
+      /usr/local/bin/lazygit
+  when: ansible_distribution in  ['Ubuntu']
+- name: Install git and libsecret (Arch)
+  become: true
+  pacman:
+    name:
+      - git
+      - libsecret
+      - lazygit
+    state: present
+  when: ansible_distribution in [ 'Archlinux' ]
+
+- name: Build Git credential helper from libsecret sources
+  become: true
+  command: "make --directory=/usr/share/doc/git/contrib/credential/libsecret"
+  args:
+    creates: /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+  when:  ansible_distribution in  ['Ubuntu', 'Archlinux']
+- name: Register Git credential helper
+  become: true
+  become_user: "{{ user }}"
+  command: "git config --global credential.helper /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret"
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '20.04') or ansible_distribution == 'Archlinux'

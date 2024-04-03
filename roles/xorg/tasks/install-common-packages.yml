@@ -25,6 +25,10 @@
       - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
       - tmux
 
+- name: add /usr/local/bin to path
+  lineinfile:
+    path: "/etc/profile"
+    line: "export PATH=$PATH:/usr/local/bin"
 
 - name: install tmux
   import_tasks: user-cfg-tmux.yml

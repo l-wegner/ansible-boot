@@ -9,6 +9,9 @@
   - name: update user
     import_tasks: update-user.yml
 
+  - name: install git
+    import_tasks: install-git.yml
+
   - name: install xorg
     import_tasks: xorg.yml
 
@@ -37,7 +40,6 @@
       asdf_cfg: "{{ asdf_dif }}/.asdfrc"
     block:
       - import_tasks: install-asdf.yml
-      - import_tasks: install-nodejs.yml
 
   - name: install ansible lsp
     import_tasks: install-ansible-lsp.yml
