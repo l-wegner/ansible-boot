@@ -134,6 +134,10 @@
     regexp: '^((xoxoExec=)(?!.*-P {{ default_firefox_profile }}.*))'
     replace: '\1 -P {{ default_firefox_profile }}'
 
+- name: install klavaro
+  when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+  import_tasks: install-klavaro.yml
+
 - name: check dotfiles exist
   when: lookup('ansible.builtin.env','USER_NM')|length>0 
   vars:
