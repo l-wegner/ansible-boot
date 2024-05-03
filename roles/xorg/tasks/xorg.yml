@@ -1,8 +1,6 @@
 - name: install nvidia
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   tags: [ 'never', 'nvidia' ]
-  args:
-    force_apt_get: true
   vars:
     distro_packages:
       'Arch':
@@ -24,8 +22,7 @@
 
 - name: install xmonad
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
-  args:
-    force_apt_get: true
+
   vars:
     distro_packages:
       'Arch':
