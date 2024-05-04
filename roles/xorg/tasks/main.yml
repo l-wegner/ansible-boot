@@ -19,6 +19,9 @@
   - name: install oh-my-zsh
     import_tasks: install-oh-my-zsh.yml
 
+  - name: install appimagelauncher
+    import_tasks: install-app-image-launcher.yml
+
   - name: install rust
     vars:
       rust_user: "{{ user }}"
