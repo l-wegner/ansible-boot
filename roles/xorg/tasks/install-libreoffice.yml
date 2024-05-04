@@ -1,0 +1,21 @@
+- name: install libreoffcie (arch)
+  when: ansible_distribution in ['Arch','Archlinux']
+  become: true
+  package:
+    name:
+      - libreoffice-still
+      - ttf-caladea
+      - ttf-carlito
+      - ttf-dejavu
+      - ttf-liberation
+      - ttf-linux-libertine-g
+      - noto-fonts
+      - adobe-source-code-pro-fonts
+      - adobe-source-sans-fonts
+      - adobe-source-serif-fonts
+      - libmythes
+      - mythes-en
+      - mythes-de
+      - hunspell
+      - hunspell-en_us
+      - hunspell-de
