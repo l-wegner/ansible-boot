@@ -1,0 +1,13 @@
+- name: install discord (Ubuntu)
+  fail:
+    msg: AUR not supported - appimagelauncher not installed
+    name: flatpak
+  when: ansible_distribution == 'Ubuntu'
+  register: discord_install_result
+
+- name: install discord (Arch)
+  flatpak:
+    name: app/com.discordapp.Discord/x86_64/stable
+    state: present 
+  when: ansible_distribution in ['Arch','Archlinux']
+  register: discord_install_result
