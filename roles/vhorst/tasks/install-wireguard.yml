@@ -1,0 +1,9 @@
+- name: install wireguard
+  when: ansible_distribution in [ 'Ubuntu' ]
+  become: true
+  package:
+    update_cache: true
+    name:
+      - wireguard
+      - wireguard-tools
+

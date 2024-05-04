@@ -1,0 +1,2 @@
+- name: install docker
+  import_tasks: install-wireguard.yml
