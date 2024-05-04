@@ -1,0 +1,20 @@
+- name: install joplin
+  become: yes
+  become_user: "{{ user }}"
+  block:
+    - name: download joplin latest-linux.yml
+      get_url:
+        url: https://github.com/laurent22/joplin/releases/latest/download/latest-linux.yml
+        dest: "/home/{{ user }}/joplin-latest-linux.yml"
+        mode: '0666'
+    - name: load yaml
+      include_vars:
+        file:  "/home/{{ user }}/joplin-latest-linux.yml"
+        name: joplin_latest
+    - debug:
+        msg: "{{ joplin_latest }}"  
+    - name: "download {{ joplin_latest.path }}"
+      get_url:
+        url: "https://github.com/laurent22/joplin/releases/latest/download/{{ joplin_latest.files[0].url }}"
+        dest: "/home/{{ user }}/Applications/{{joplin_latest.path }}"
+        mode: '0500'

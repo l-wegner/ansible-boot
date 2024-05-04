@@ -31,6 +31,8 @@
 
   - import_tasks: install-bluetooth.yml
 
+  - import_tasks: install-appimages.yml
+
   - name: install go
     vars:
       go_user: "{{ user }}"
