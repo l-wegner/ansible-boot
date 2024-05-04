@@ -1,0 +1,24 @@
+- name: install docker
+  when: ansible_distribution in [ 'Ubuntu' ]
+  become: true
+  block:
+    - name: install docker requirements
+      package:
+        update_cache: true
+        name:
+          - curl
+          - gnupg
+          - apt-transport-https
+          - docker.io
+    - name: add larser group
+      group:
+        name: "larser"
+
+    - name: Create the `larser` user
+      ansible.builtin.user:
+        name: larser
+        create_home: yes
+        group: larser
+        shell: /bin/bash
+        groups:
+          - 'docker'
