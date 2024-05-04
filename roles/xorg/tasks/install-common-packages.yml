@@ -17,6 +17,7 @@
     name:
       - curl
       - jq
+      - yq
       - "{{ distro_packages[ansible_distribution]['btop'] | default ('') }}"
       - "{{ distro_packages[ansible_distribution]['base_devel'] | default ('') }}"
       - yt-dlp
