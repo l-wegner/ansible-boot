@@ -1,13 +1,22 @@
-- name: install discord (Ubuntu)
-  fail:
-    msg: AUR not supported - appimagelauncher not installed
-    name: flatpak
-  when: ansible_distribution == 'Ubuntu'
-  register: discord_install_result
-
 - name: install discord (Arch)
   flatpak:
     name: app/com.discordapp.Discord/x86_64/stable
     state: present 
   when: ansible_distribution in ['Arch','Archlinux']
   register: discord_install_result
+
+- name: install discord (Arch)
+  become: yes
+  become_user: "{{ user }}"
+  block:
+    - name: prepare ~/.config/user-tmpfiles.d
+      file:
+        path: "/home/{{ user }}/.config/user-tmpfiles.d/"
+        state: directory
+
+    - name: create ~/.config/user-tmpfiles.d/discord.conf
+      lineinfile:
+        path: "/home/{{ user }}/.config/user-tmpfiles.d/discord.conf"
+        line: "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+        create: true
+  when: ansible_distribution in ['Arch','Archlinux']

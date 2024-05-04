@@ -1,0 +1,6 @@
+- name: install flatpak
+  become: true
+  package:
+    name: flatpak
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  register: flatpak_install_result

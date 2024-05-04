@@ -22,6 +22,8 @@
   - name: install appimagelauncher
     import_tasks: install-app-image-launcher.yml
 
+  - import_tasks: install-flatpak.yml
+
   - name: install rust
     vars:
       rust_user: "{{ user }}"
