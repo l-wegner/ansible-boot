@@ -1,0 +1,15 @@
+- name: install bluetooth (arch)
+  when: ansible_distribution in ['Arch','Archlinux']
+  become: true
+  package:
+    name:
+      - bluez-utils
+      - bluez
+
+
+- name: enable bluetooth.service
+  become: true
+  systemd:
+    name: bluetooth.service
+    state: started
+    enabled: true

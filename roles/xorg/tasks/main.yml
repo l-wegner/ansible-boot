@@ -29,6 +29,8 @@
       - import_tasks: install-rustup.yml
       - import_tasks: install-rust-analyzer.yml
 
+  - import_tasks: install-bluetooth.yml
+
   - name: install go
     vars:
       go_user: "{{ user }}"
