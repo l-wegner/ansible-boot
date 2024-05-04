@@ -139,6 +139,8 @@
 
 - import_tasks: install-signal.yml
 
+- import_tasks: install-strawberry.yml
+
 - name: check dotfiles exist
   when: lookup('ansible.builtin.env','USER_NM')|length>0 
   vars:
