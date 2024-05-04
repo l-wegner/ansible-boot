@@ -15,3 +15,5 @@ golang_sha256=aab8e15785c997ae20f9c88422ee35d962c4562212bb0f879d052a35c8307c7f
 dot_files_repo=git@github.com:l-wegner/dotfiles.git
 git_user="Lars Wegner"
 git_email="lars.wegner.devs@gmail.com"
+terraform_version=1.5.7
+jetbrains_toolbox_version=2.0.5.17700
