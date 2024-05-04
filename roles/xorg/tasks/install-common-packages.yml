@@ -7,16 +7,17 @@
       'Archlinux':
         wake_on_lan: 'wol'
         base_devel: 'base-devel'
+        btop: 'btop'
       'Ubuntu':
         wake_on_lan: 'wakeonlan'
         base_devel: 'build-essential'
-
+#        fixme falling back to htop
+        btop: 'htop'
   package:
     name:
       - curl
       - jq
-#      FIXME: btop is not available in the official repositories
-#      - btop
+      - "{{ distro_packages[ansible_distribution]['btop'] | default ('') }}"
       - "{{ distro_packages[ansible_distribution]['base_devel'] | default ('') }}"
       - yt-dlp
       - nnn
