@@ -1,0 +1,6 @@
+- name: install signal-desktop
+  when: ansible_distribution in ['Arch','Archlinux']
+  become: true
+  package:
+    name:
+      - signal-desktop
