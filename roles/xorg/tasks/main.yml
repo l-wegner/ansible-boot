@@ -13,6 +13,7 @@
     import_tasks: install-git.yml
 
   - name: install xorg
+    become: yes
     import_tasks: xorg.yml
 
   - name: install oh-my-zsh
@@ -40,6 +41,9 @@
       asdf_cfg: "{{ asdf_dif }}/.asdfrc"
     block:
       - import_tasks: install-asdf.yml
+
+  - name: install abcde
+    import_tasks: install-abcde.yml
 
   - name: install ansible lsp
     import_tasks: install-ansible-lsp.yml
