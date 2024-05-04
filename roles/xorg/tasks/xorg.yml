@@ -139,6 +139,8 @@
 
 - import_tasks: install-signal.yml
 
+- import_tasks: install-jetbrains.yml
+
 - import_tasks: install-strawberry.yml
 
 - import_tasks: install-libreoffice.yml

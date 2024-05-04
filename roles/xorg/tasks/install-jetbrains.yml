@@ -1,0 +1,38 @@
+- name: install jetbrains toolbox
+  become: true
+  become_user: "{{ user }}"
+  vars:
+    tar_file: "/home/{{ user }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
+  block:
+    - name: install req
+      become: true
+      package:
+        name:
+          - fuse2 
+          - libxi 
+          - libxrender
+          - libxtst
+          - fontconfig 
+          - gtk3 
+          - tar
+    - name: download toolbox
+      get_url:
+        url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
+        dest: "{{ tar_file }}"
+    - name: unpak toolbox
+      unarchive:
+        src: "{{ tar_file }}"
+        dest: "/home/{{ user }}/Applications/"
+    - name: remove toolbox tar
+      file:
+        path: "{{ tar_file }}"
+        state: absent
+    - name: move app image
+      shell:
+        chdir: "/home/{{ user }}/Applications/"
+        cmd: "mv jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
+        creates: "Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
+    - name: remove empty dir
+      file: 
+        path: "/home/{{ user }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
+        state: absent
