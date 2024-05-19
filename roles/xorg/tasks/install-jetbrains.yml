@@ -4,7 +4,8 @@
   vars:
     tar_file: "/home/{{ user }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
   block:
-    - name: install req
+    - name: install req (Arch)
+      when: ansible_distribution in [ 'Arch', 'Archlinux' ]
       become: true
       package:
         name:
@@ -14,6 +15,15 @@
           - libxtst
           - fontconfig 
           - gtk3 
+          - tar
+    - name: install req (Ubuntu)
+      when: ansible_distribution in [ 'Ubuntu' ]
+      become: true
+      package:
+        name:
+          - libfuse2
+          - fuse
+          - fontconfig
           - tar
     - name: download toolbox
       get_url:
