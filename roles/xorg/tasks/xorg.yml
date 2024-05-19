@@ -132,14 +132,12 @@
     replace: '\1 -P {{ default_firefox_profile }}'
 
 - name: install klavaro
-  when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+  when: ansible_distribution in [ 'Arch', 'Archlinux', 'Ubuntu' ]
   import_tasks: install-klavaro.yml
 
 - import_tasks: install-discord.yml
 
 - import_tasks: install-signal.yml
-
-- import_tasks: install-jetbrains.yml
 
 - import_tasks: install-strawberry.yml
 

@@ -1,11 +1,5 @@
 - name: install AppImages
   block:
-    - name: install dependencies
-      become: true
-      package:
-        name:
-          - fuse2
-      when: ansible_distribution in [ 'Ubuntu' ]
     - name: prepare AppImage folder
       become: true
       become_user: "{{ user }}"
@@ -15,4 +9,5 @@
     - become_user: "{{ user }}"
       become: true
       block:
-        - include_tasks: install-joplin.yml
+        - import_tasks: install-joplin.yml
+        - import_tasks: install-jetbrains.yml
