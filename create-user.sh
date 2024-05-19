@@ -16,4 +16,4 @@ if [ ! -z "$TOOR_UID" ]; then
   export TOOR_UID
 fi
 
-ansible-playbook -vv -i inventory site.yml
+ansible-playbook -vv -i inventory site.yml $*
