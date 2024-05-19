@@ -65,6 +65,9 @@
   - name: install neovim
     import_tasks: install-neovim.yml
 
+  - name: install yq
+    import_tasks: install-yq.yml
+
   - name: install keepassx
     import_tasks: install-keepassxc.yml
 
