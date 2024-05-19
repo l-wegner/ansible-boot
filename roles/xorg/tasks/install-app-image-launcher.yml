@@ -1,4 +1,5 @@
 - name: install appimagelauncher (Ubuntu)
+  become: yes
   block:
     - name: Add keepass ppa
       apt_repository:
@@ -9,19 +10,13 @@
         update_cache: true
       changed_when: false
     - name: install appimagelauncher
-      become: true
       package:
         name: appimagelauncher
   when: ansible_distribution == 'Ubuntu'
 
 - name: install appimagelauncher using kewlfft.aur collection (Arch)
-  become: yes
-  become_user: app_builder
-  environment:
-    EDITOR: "true"
-  kewlfft.aur.aur:
-    name: "appimagelauncher"
-    use: "paru"
+  tags: [ 'always', 'aur']
+  include_tasks: with-paru-install-app-image-launcher.yml
   when: ansible_distribution in ['Arch', 'Archlinux']
 
 - name: link appimagelauncher.cfg

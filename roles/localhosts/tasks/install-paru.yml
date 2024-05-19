@@ -37,6 +37,8 @@
         state: absent
 
     - name: Install kewlfft.aur collection if not already installed
+      become: yes
+      become_user: app_builder
       command: ansible-galaxy collection install kewlfft.aur
       args:
         creates: "~/.ansible/collections/ansible_collections/kewlfft/aur"

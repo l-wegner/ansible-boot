@@ -1,4 +1,4 @@
-- name: install AppImages 
+- name: install AppImages
   block:
     - name: install dependencies
       become: true
@@ -9,8 +9,8 @@
     - name: prepare AppImage folder
       become: true
       become_user: "{{ user }}"
-      file: 
-        path: "/home/{{ user }}/Applications" 
+      file:
+        path: "/home/{{ user }}/Applications"
         state: directory
     - become_user: "{{ user }}"
       become: true

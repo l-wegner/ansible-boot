@@ -1,3 +1,10 @@
+- name: install abcde dependencies
+  when: ansible_distribution in ['Arch','Archlinux','Ubuntu']
+  become: true
+  package:
+    name:
+      - id3v2
+
 - name: Install abcde (ubuntu)
   when: ansible_distribution in ['Ubuntu']
   become: yes
@@ -6,20 +13,11 @@
     state: present
 
 
-- name: install abcde dependencies (arch)
-  when: ansible_distribution in ['Arch','Archlinux']
-  become: true
-  package:
-    name:
-      - id3v2
+
 - name: Install abcde from AUR (arch)
-  when: ansible_distribution in ['Arch','Archlinux']
-  become: yes
-  become_user: aur_builder
-  kewlfft.aur.aur:
-    name: abcde
-    use: paru
-    state: present
+  tags: [ 'always', 'aur']
+  include_tasks: with-paru-install-abcde.yml
+  when: ansible_distribution in ['Arch', 'Archlinux']
 
 - name: link abcde config
   become: yes

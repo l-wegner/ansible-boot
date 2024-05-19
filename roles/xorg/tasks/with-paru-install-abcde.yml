@@ -1,0 +1,8 @@
+- name: Install abcde from AUR (arch)
+  when: ansible_distribution in ['Arch','Archlinux']
+  become: yes
+  become_user: aur_builder
+  kewlfft.aur.aur:
+    name: abcde
+    use: paru
+    state: present

@@ -20,8 +20,7 @@
     import_tasks: install-oh-my-zsh.yml
 
   - name: install appimagelauncher
-    tags: [ 'always', 'aur']
-    include_tasks: install-app-image-launcher.yml
+    import_tasks: install-app-image-launcher.yml
 
   - import_tasks: install-flatpak.yml
 
@@ -53,8 +52,7 @@
       - import_tasks: install-asdf.yml
 
   - name: install abcde
-    tags: [ 'always', 'aur']
-    include_tasks: install-abcde.yml
+    import_tasks: install-abcde.yml
 
   - name: install ansible lsp
     import_tasks: install-ansible-lsp.yml

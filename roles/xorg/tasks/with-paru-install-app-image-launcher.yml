@@ -1,0 +1,9 @@
+- name: install appimagelauncher using kewlfft.aur collection (Arch)
+  become: yes
+  become_user: app_builder
+  environment:
+    EDITOR: "true"
+  kewlfft.aur.aur:
+    name: "appimagelauncher"
+    use: "paru"
+  when: ansible_distribution in ['Arch', 'Archlinux']
