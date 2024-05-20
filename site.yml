@@ -1,8 +1,22 @@
 ---
 - hosts: my_workstation
-  roles:
-    - localhosts
-    - xorg
+  tasks:
+    - name: Import role localhosts
+      import_role:
+        name: localhosts
+      tags:
+        - workstation
+    - name: Import role xorg
+      import_role:
+        name: xorg
+      tags:
+        - workstation
+
 - hosts: vhorst
-  roles:
-    - vhorst
+  tasks:
+    - name: Import role vhorst
+      import_role:
+        name: vhorst
+      tags:
+        - infra
+        - horst
