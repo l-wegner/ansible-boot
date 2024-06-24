@@ -16,6 +16,7 @@
   package:
     name:
       - curl
+      - feh
       - jq
       - "{{ distro_packages[ansible_distribution]['btop'] | default ('') }}"
       - "{{ distro_packages[ansible_distribution]['base_devel'] | default ('') }}"
@@ -25,6 +26,7 @@
       - rsync
       - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
       - tmux
+      - dust
 
 - name: add /usr/local/bin to path
   lineinfile:
