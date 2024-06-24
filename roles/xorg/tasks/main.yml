@@ -71,3 +71,6 @@
 
   - name: install jupyter notebook
     import_tasks: install-jupyter-notebook.yml
+
+  - name: install ignite
+    import_tasts: install-ignite

@@ -1,0 +1,11 @@
+
+- name: install ignite-cli
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  shell:
+    cmd: |
+      curl https://get.ignite.com/cli! | bash
+    executable: /bin/bash
+  args:
+    chdir: "{{ userhome }}"
+    creates: "/usr/local/bin/ignite"
+  tags: [ 'never','ignite' ]
