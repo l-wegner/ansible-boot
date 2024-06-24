@@ -25,6 +25,7 @@
       - vim
       - zip
       - unzip
+      - rsync
 
 - name: add sshd packages
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
