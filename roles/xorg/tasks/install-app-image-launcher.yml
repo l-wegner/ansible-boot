@@ -15,7 +15,7 @@
   when: ansible_distribution == 'Ubuntu'
 
 - name: install appimagelauncher using kewlfft.aur collection (Arch)
-  tags: [ 'always', 'aur']
+  tags: [ 'aur']
   include_tasks: with-paru-install-app-image-launcher.yml
   when: ansible_distribution in [ 'Arch', 'Archlinux' ]
 

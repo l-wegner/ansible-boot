@@ -15,7 +15,7 @@
 
 
 - name: Install abcde from AUR (arch)
-  tags: [ 'always', 'aur']
+  tags: ['aur']
   include_tasks: with-paru-install-abcde.yml
   when: ansible_distribution in ['Arch', 'Archlinux']
 
