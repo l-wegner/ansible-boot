@@ -1,0 +1,14 @@
+- name: install borgbackup (arch)
+  when: ansible_distribution in ['Arch','Archlinux']
+  become: true
+  package:
+    name:
+      - borg
+      - python-llfuse
+      - openssh
+      - borgmatic
+
+- name: Install borgtui-git from AUR (arch)
+  tags: ['aur']
+  include_tasks: with-paru-install-borgtui.yml
+  when: ansible_distribution in ['Arch', 'Archlinux']

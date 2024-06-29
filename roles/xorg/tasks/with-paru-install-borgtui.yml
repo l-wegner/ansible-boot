@@ -1,0 +1,9 @@
+- name: Install borgtui-git from AUR (arch)
+  when: ansible_distribution in ['Arch','Archlinux']
+  become: yes
+  become_user: app_builder
+  kewlfft.aur.aur:
+    name: borgtui-git
+    use: paru
+    state: present
+#    aur_only: true
