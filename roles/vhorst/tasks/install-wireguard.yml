@@ -7,3 +7,10 @@
       - wireguard
       - wireguard-tools
 
+- name: configure wireguard wg0
+  vars:
+    wg_folder: "~/keys"
+    wg_interface: "wg0"
+  block:
+    - debug: 
+        msg: test
