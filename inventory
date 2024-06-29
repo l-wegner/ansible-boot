@@ -1,7 +1,7 @@
 my_workstation ansible_connection=local
 
 [vhorst]
-wegners.net
+# example.org
 
 [vhorst:vars]
 ansible_user=toor
