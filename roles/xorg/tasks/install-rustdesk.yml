@@ -1,0 +1,35 @@
+- name: Install RustDesk AppImage on Arch Linux
+  become: yes
+  block:
+    - name: Update pacman repositories
+      pacman:
+        update_cache: yes
+
+    - name: Install dependencies
+      pacman:
+        name:
+          - wget
+          - xdg-utils
+          - fuse2
+        state: present
+    - name: Download RustDesk AppImage
+      get_url:
+        url: "https://github.com/rustdesk/rustdesk/releases/download/{{ rustdesk_ver }}/rustdesk-{{ rustdesk_ver }}-x86_64.AppImage"  # Replace with the actual URL
+        dest: "/opt/rustdesk-{{ rustdesk_ver }}-x86_64.AppImage"
+        mode: 0755
+
+    - name: Create symbolic link
+      file:
+        src: "/opt/rustdesk-{{ rustdesk_ver }}-x86_64.AppImage"
+        dest: /usr/local/bin/rustdesk
+        state: link
+
+    - name: Set permissions
+      file:
+        path: /usr/local/bin/rustdesk
+        mode: u+x
+
+    - name: Create systemd service file for RustDesk
+      template:
+        src: rustdesk.service.j2
+        dest: /etc/systemd/system/rustdesk.service

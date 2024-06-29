@@ -1,5 +1,6 @@
 - vars:
-    user: "{{ lookup('ansible.builtin.env','USER_NM') }}"
+    user: "{{ lookup('env','USER_NM') }}"
+    new_ansible_user: "{{ lookup('env','TOOR_NM') }}"
     dot_files: "/home/{{ user }}/dotfiles"
     userhome: "/home/{{ user }}"
   block:
@@ -31,9 +32,13 @@
       - import_tasks: install-rustup.yml
       - import_tasks: install-rust-analyzer.yml
 
+#  - import_tasks: install-rustdesk.yml
+
   - import_tasks: install-bluetooth.yml
 
   - import_tasks: install-appimages.yml
+
+#  - import_tasks: install-borgbackup.yml
 
   - name: install go
     vars:
@@ -73,4 +78,4 @@
     import_tasks: install-jupyter-notebook.yml
 
   - name: install ignite
-    import_tasts: install-ignite
+    import_tasks: install-ignite.yml

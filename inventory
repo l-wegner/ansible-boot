@@ -8,7 +8,6 @@ ansible_user=toor
 
 [all:vars]
 ansible_user=root
-new_ansible_user=toor
 golang_version=1.22.1
 asdf_version=v0.14.0
 golang_sha256=aab8e15785c997ae20f9c88422ee35d962c4562212bb0f879d052a35c8307c7f
@@ -17,3 +16,4 @@ git_user="Lars Wegner"
 git_email="lars.wegner.devs@gmail.com"
 terraform_version=1.5.7
 jetbrains_toolbox_version=2.0.5.17700
+rustdesk_ver=1.2.3-2
