@@ -3,7 +3,7 @@
     block:
     - name: "create {{ xmonad_config_dir }}/lib"
       file:
-        path: " {{ xmonad_config_dir }}/lib"
+        path: "{{ xmonad_config_dir }}/lib"
         state: directory
     - name: link ~/.xmonad/xmonad.hs from dotfiles
       file:
