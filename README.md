@@ -17,4 +17,11 @@ This
 sudo apt remove ansible
 pip3 install ansible
 
-ssh -N -R 192.168.23.53:8080:192.168.1.5:8006 pi@192.168.23.53
+
+## Work in progress
+### role `xorg`
+- borg backup
+- rustdesk
+### role `vhorst`
+- wireguard
+
