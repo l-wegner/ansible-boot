@@ -2,7 +2,7 @@
   become: true
   when: "add_user and ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]"
   group:
-    name: "{{ lookup('ansible.builtin.env','USER_NM') }}"
+    name: "{{ user }}"
     gid: 1000
 
 - name: add ansible group
