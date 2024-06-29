@@ -22,7 +22,7 @@
   become: true
   when: "add_ansible and ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]"
   user:
-    name: toor
+    name: "{{ new_ansible_user }}"
     uid: "{{ ansible_gid | int }}"
     comment: Ansible User
     group: ansible

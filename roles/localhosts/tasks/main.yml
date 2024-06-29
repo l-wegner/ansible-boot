@@ -4,6 +4,7 @@
     user_pw_set: "{{ lookup('ansible.builtin.env','USER_PW_HASH')|length>0 }}"
     user_home: "/home/{{ lookup('env','USER_NM') }}"
     add_ansible: "{{ lookup('ansible.builtin.env','TOOR_UID') | length>0 }}"
+    new_ansible_user: "{{ lookup('env','TOOR_NM') }}"
     ansible_pw_set: "{{ lookup('ansible.builtin.env','TOOR_PW_HASH')|length>0 }}"
     ansible_gid: "{{ lookup('ansible.builtin.env','TOOR_UID', default='1001') | int }}"
   become: yes
@@ -16,6 +17,8 @@
     import_tasks: add-base-packages.yml
   - name: add user
     import_tasks: add-user.yml
+    tags: [ 'user']
   - name: install paru
     import_tasks: install-paru.yml
+    tags: [ 'paru']
 
