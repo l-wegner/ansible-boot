@@ -51,6 +51,9 @@
     groups:
       - 'wheel'
 
+- name: "clone dotfiles for {{ user }}"
+  import_tasks: clone-dotfiles.yml
+
 - name: Create the `app_builder` user
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   ansible.builtin.user:
