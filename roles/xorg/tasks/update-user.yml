@@ -8,6 +8,6 @@
     name: "{{ user }}"
     shell: /usr/bin/zsh
 # FIXME wheel is not on every system, do I need storage?
-#    groups: wheel,storage
+    groups: wheel,storage
     append: yes
   when: zsh_bin.stat.exists
