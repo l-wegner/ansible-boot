@@ -42,3 +42,10 @@
       command: ansible-galaxy collection install kewlfft.aur
       args:
         creates: "~/.ansible/collections/ansible_collections/kewlfft/aur"
+
+    - name: Install kewlfft.aur collection if not already installed
+      become: yes
+      become_user: "{{ new_ansible_user }}"
+      command: ansible-galaxy collection install kewlfft.aur
+      args:
+        creates: "~/.ansible/collections/ansible_collections/kewlfft/aur"
