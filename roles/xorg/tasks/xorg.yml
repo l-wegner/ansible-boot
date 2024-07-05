@@ -1,5 +1,10 @@
-- name: install nvidia
+- name: check for gpu
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  shell: "lspci | grep ' VGA '"
+  register: gpulookup
+
+- name: install nvidia
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'NVIDIA' in gpulookup.stdout_lines
   tags: [ 'never', 'nvidia' ]
   vars:
     distro_packages:
@@ -19,6 +24,11 @@
       - "{{ distro_packages[ansible_distribution]['gpu_driver_utils'] | default ('') }}" # gpu driver utils
       - "{{ distro_packages[ansible_distribution]['vulkan32'] | default ('') }}"  # 32bit vulkan driver
 
+- name: install amd
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'AMD' in gpulookup.stdout_lines
+  tags: [ 'never', 'amd' ]
+  debug:
+    msg: "TODO install AMD drivers"
 
 - name: install xmonad
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]

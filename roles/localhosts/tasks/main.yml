@@ -15,6 +15,7 @@
     tags: [ 'never', 'debug' ]
   - name: install base packages
     import_tasks: add-base-packages.yml
+    tags: [ 'always']
   - name: add user
     import_tasks: add-user.yml
     tags: [ 'user']
