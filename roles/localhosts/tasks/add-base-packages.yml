@@ -34,7 +34,6 @@
     name:
       - openssh
       - sshpass
-  tags: [ 'never','sshd' ]
 
 
 - name: enable NetworkManager.service
