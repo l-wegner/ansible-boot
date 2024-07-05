@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+set -e
 SCRIPT_LOC=$( cd -- "$(dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 if [ "$EUID" -ne 0 ]
 then
