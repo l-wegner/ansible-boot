@@ -1,0 +1,24 @@
+- name: Install Steam (Ubuntu)
+  package:
+    name: "steam"
+  when: ansible_distribution in ['Ubuntu']
+
+- name: Install Steam (Arch)
+  when: ansible_distribution in ['Archlinux']
+  block:
+    - name: generate en_US.UTF-8 locale
+      block:
+        - name: enable en_US.UTF-8 at /etc/locale.gen
+          replace:
+            dest: /etc/locale.gen
+            regexp: "#\\s*en_US.UTF-8 UTF-8"
+            replace: "en_US.UTF-8 UTF-8"
+            backup: yes
+        - name: regenerate locales
+          shell:
+            locale-gen
+    - name: install packages
+      package:
+        name:
+          - ttf-liberation
+          - steam

@@ -11,6 +11,12 @@
         name: xorg
       tags:
         - workstation
+    - name: Import role game
+      import_role:
+        name: game
+      tags:
+        - never
+        - game
 
 - hosts: vhorst
   tasks:
