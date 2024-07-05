@@ -7,3 +7,10 @@
     repo: "{{ dot_files_repo }}"
     dest: "{{ user_home }}/dotfiles"
     accept_hostkey: true
+
+- name: make .config folder for {{ user }}
+  file:
+    path: "{{ user_home }}/.config"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: directory
