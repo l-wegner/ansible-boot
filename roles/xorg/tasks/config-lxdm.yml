@@ -27,5 +27,4 @@
     - name: enable lxdm.service
       systemd:
         name: lxdm.service
-        state: started
         enabled: true
