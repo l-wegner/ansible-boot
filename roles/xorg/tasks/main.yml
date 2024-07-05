@@ -13,6 +13,12 @@
   - name: install git
     import_tasks: install-git.yml
 
+  - name: install appimagelauncher
+    import_tasks: install-app-image-launcher.yml
+
+  - name: install flatpak
+    import_tasks: install-flatpak.yml
+
   - name: install xorg
     become: yes
     import_tasks: xorg.yml
@@ -20,10 +26,7 @@
   - name: install oh-my-zsh
     import_tasks: install-oh-my-zsh.yml
 
-  - name: install appimagelauncher
-    import_tasks: install-app-image-launcher.yml
 
-  - import_tasks: install-flatpak.yml
 
   - name: install rust
     vars:
