@@ -34,5 +34,4 @@
     path: "/etc/profile"
     line: "export PATH=$PATH:/usr/local/bin"
 
-- name: install tmux
-  import_tasks: user-cfg-tmux.yml
+
