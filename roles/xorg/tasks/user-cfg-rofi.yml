@@ -4,9 +4,15 @@
       file:
         path: "{{ userhome }}/.config/rofi"
         state: directory
-    - name: link rofi config
-      when: not ansible_distribution == 'Arch' and not ansible_distribution == 'Archlinux'
+    - name: link rofi config (ubuntu)
+      when: ansible_distribution not in [ 'Arch','Archlinux']
       file: 
+        src: "{{ dot_files }}/home/.config/rofi/config_ubuntu.rasi"
+        dest: "{{ userhome }}/.config/rofi/config.rasi"
+        state: link
+    - name: link rofi config (arch)
+      when: ansible_distribution in [ 'Arch','Archlinux']
+      file:
         src: "{{ dot_files }}/home/.config/rofi/config.rasi"
         dest: "{{ userhome }}/.config/rofi/config.rasi"
         state: link
@@ -15,24 +21,3 @@
         src: "{{ dot_files }}/home/.config/rofi/mytheme.rasi"
         dest: "{{ userhome }}/.config/rofi/mytheme.rasi"
         state: link
-    - name: update rofi config for newer version (arch)
-      when: ansible_distribution in ['Arch', 'Archlinux']
-      block:
-      - name: copy ~/.config/rofi/config.rasi from dotfiles
-        copy:
-          src: "{{ dot_files }}/home/.config/rofi/config.rasi"
-          dest: "{{ userhome }}/.config/rofi/config.rasi"
-          mode: 0644
-          force: no
-        register: new_rofi_config
-      - name: comment out the theme at ~/.config/rofi/config.rasi
-        replace:
-          path: "{{ userhome }}/.config/rofi/config.rasi"
-          regexp: "^(\\s*theme: .+;)$"
-          replace: "/*\\1*/"
-        when: new_rofi_config.changed == true
-      - name: add theme at the bottom at ~/.config/rofi/config.rasi
-        lineinfile:
-          path: "{{ userhome }}/.config/rofi/config.rasi"
-          line: "@theme \"~/.config/rofi/mytheme.rasi\""
-        when: new_rofi_config.changed == true
