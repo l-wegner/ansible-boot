@@ -29,6 +29,7 @@
       - dust
 
 - name: add /usr/local/bin to path
+  become: true
   lineinfile:
     path: "/etc/profile"
     line: "export PATH=$PATH:/usr/local/bin"
