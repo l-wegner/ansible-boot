@@ -19,6 +19,9 @@
   - name: install flatpak
     import_tasks: install-flatpak.yml
 
+  - name: install yq
+    import_tasks: install-yq.yml
+
   - name: install xorg
     become: yes
     import_tasks: xorg.yml
@@ -71,8 +74,6 @@
   - name: install neovim
     import_tasks: install-neovim.yml
 
-  - name: install yq
-    import_tasks: install-yq.yml
 
   - name: install keepassx
     import_tasks: install-keepassxc.yml

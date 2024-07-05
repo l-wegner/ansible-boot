@@ -2,19 +2,15 @@
   become: yes
   become_user: "{{ user }}"
   block:
-    - name: download joplin latest-linux.yml
-      get_url:
-        url: https://github.com/laurent22/joplin/releases/latest/download/latest-linux.yml
-        dest: "/home/{{ user }}/joplin-latest-linux.yml"
-        mode: '0666'
-    - name: load yaml
-      include_vars:
-        file:  "/home/{{ user }}/joplin-latest-linux.yml"
-        name: joplin_latest
-    - debug:
-        msg: "{{ joplin_latest }}"  
-    - name: "download {{ joplin_latest.path }}"
-      get_url:
-        url: "https://github.com/laurent22/joplin/releases/latest/download/{{ joplin_latest.files[0].url }}"
-        dest: "/home/{{ user }}/Applications/{{joplin_latest.path }}"
-        mode: '0500'
+    - shell: |
+        USER_HOME="/home/{{ user }}"
+        YAML_URL="https://github.com/laurent22/joplin/releases/latest/download/latest-linux.yml"
+        YAML_DEST="$USER_HOME/joplin-latest-linux.yml"
+        APP_DIR="$USER_HOME/Applications"
+        curl -L -o $YAML_DEST $YAML_URL
+        JOPLIN_PATH=$(yq eval -o=json $YAML_DEST | jq -r '.path')
+        JOPLIN_FILE_URL=$(yq eval -o=json $YAML_DEST | jq -r '.files[0].url')
+        curl -L -o $APP_DIR/$JOPLIN_PATH "https://github.com/laurent22/joplin/releases/latest/download/$JOPLIN_FILE_URL"
+        chmod 0500 $APP_DIR/$JOPLIN_PATH
+      args:
+        executable: /bin/bash
