@@ -2,7 +2,7 @@
   become: true
   become_user: "{{ user }}"
   vars:
-    tar_file: "/home/{{ user }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
+    tar_file: "{{ userhome }}/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
   block:
     - name: install req (Arch)
       when: ansible_distribution in [ 'Arch', 'Archlinux' ]
@@ -28,7 +28,7 @@
     - name: download toolbox
       get_url:
         url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
-        dest: "{{ userhome }}/{{ tar_file }}"
+        dest: "{{ tar_file }}"
     - name: unpak toolbox
       unarchive:
         src: "{{ tar_file }}"
