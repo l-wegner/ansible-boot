@@ -28,7 +28,7 @@
     - name: download toolbox
       get_url:
         url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
-        dest: "{{ tar_file }}"
+        dest: "{{ userhome }}/{{ tar_file }}"
     - name: unpak toolbox
       unarchive:
         src: "{{ tar_file }}"
@@ -39,10 +39,8 @@
         state: absent
     - name: move app image
       shell:
-        chdir: "/home/{{ user }}/Applications/"
-        cmd: "mv jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
+        chdir: "{{ userhome }}/Applications/"
+        cmd: |
+          mv jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
+          rmdir jetbrains-toolbox-{{ jetbrains_toolbox_version}}
         creates: "Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
-    - name: remove empty dir
-      file: 
-        path: "/home/{{ user }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
-        state: absent
