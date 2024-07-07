@@ -5,7 +5,7 @@
     executable: /bin/bash
     cmd: |
       . /etc/profile
-      GOPATH=/home/{{ go_user }}/git/go-lib go install golang.org/x/tools/gopls@latest
+      GOPATH=/home/{{ go_user }}/git/go-lib /usr/local/go/bin/go install golang.org/x/tools/gopls@latest
     creates: "/home/{{ go_user }}/git/go-lib/bin/gopls"
   environment:
     PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
