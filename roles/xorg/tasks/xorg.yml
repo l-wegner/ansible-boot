@@ -71,7 +71,7 @@
       - "{{ distro_packages[ansible_distribution]['login_manager'] | default ('') }}"
       - arandr # convenient gui for setting resolution
       - xmonad # tiling window manager
-      - "{{ distro_packages[ansible_distribution]['haskell_hostname'] | default ('') }}" # lib with features for xmonad
+      - "{{ distro_packages[ansible_distribution]['haskell_contrib'] | default ('') }}" # lib with features for xmonad
       - "{{ distro_packages[ansible_distribution]['haskell_hostname'] | default ('') }}"  # haskell Network.Hostname
       - "{{ distro_packages[ansible_distribution]['haskell_nw_info'] | default ('') }}"  # haskell Network.Info
       - xmobar # panel for xmonad
