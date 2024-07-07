@@ -26,7 +26,7 @@
 - name: install amd
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   debug:
-    msg: "TODO install AMD drivers"
+    msg: gpulookup.stdout_lines
 
 - name: install xmonad
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
