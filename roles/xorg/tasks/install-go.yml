@@ -15,10 +15,11 @@
         path: /usr/local/go
         state: absent
       when: golangversion.changed
-    - name: install golang (unarchive)
-      unarchive:
-        src: "/home/{{ go_user }}/golang-{{ golang_version }}.tar.gz"
-        dest: "/usr/local/"
+    - name: install golang
+      shell:
+        chdir: "/home/{{ user }}"
+        cmd: |
+          tar -xf golang-{{ golang_version }}.tar.gz -C /usr/local
       when: golangversion.changed
     - name: install golang (add to path)
       lineinfile:
