@@ -34,12 +34,12 @@
         state: present
     - name: "Add {{ package_name }} bin"
       become: true
-      owner: "{{ package_user }}"
-      group: "{{ package_user }}"
       lineinfile:
         path: "/home/{{ package_user }}/.profile"
         line: "{{ item.line }}"
         create: true
+        owner: "{{ package_user }}"
+        group: "{{ package_user }}"
       loop:
         - { line: "### {{ package_name }} ###" }
         - { line: "export PATH=$PATH:{{ venv_path }}/bin" }
