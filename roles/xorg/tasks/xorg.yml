@@ -4,7 +4,7 @@
   register: gpulookup
 
 - name: install nvidia
-  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'NVIDIA' in gpulookup.stdout_lines
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'NVIDIA' in gpulookup.stdout
   vars:
     distro_packages:
       'Arch':
@@ -25,17 +25,18 @@
 
 - name: install amd
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'AMD' in gpulookup.stdout
-  debug:
-    msg:   "{{ gpulookup.stdout_lines }}"
+  package:
+    update_cache: true
+    name:
+      - mesa
+      - lib32-mesa
+      - vulkan-radeon
+      - lib32-vulkan-radeon
+      - libva-mesa-driver
+      - lib32-libva-mesa-driver
+      - mesa-vdpau
+      - lib32-mesa-vdpau
 
-# mesa
-# lib32-mesa
-# vulkan-radeon
-# lib32-vulkan-radeon
-# libva-mesa-driver
-# lib32-libva-mesa-driver
-# mesa-vdpau
-# lib32-mesa-vdpau
 - name: install xmonad
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
 
