@@ -3,7 +3,8 @@
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   shell:
     cmd: |
-      curl https://get.ignite.com/cli! | bash
+      curl https://get.ignite.com/cli | bash
+      sudo mv ignite /usr/local/bin/
     executable: /bin/bash
   args:
     chdir: "{{ userhome }}"
