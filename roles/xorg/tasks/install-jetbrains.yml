@@ -29,12 +29,20 @@
       get_url:
         url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
         dest: "{{ tar_file }}"
-    - name: move app image
+    - name: untar and move app image
       shell:
-        chdir: "{{ userhome }}/Applications/"
+        chdir: "{{ userhome }}/"
         cmd: |
-          tar -xf {{ tar_file }} -C {{ userhome  }}/Applications 
+          mkdir -p {{ userhome }}/Applications 
+          ls -l
+          tar -xf {{ tar_file }} -C {{ userhome }}/Applications 
+          ls -l
+          ls -l {{ userhome }}/Applications
           rm {{ tar_file }}
-          mv jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
-          rmdir jetbrains-toolbox-{{ jetbrains_toolbox_version}}
+          ls -l 
+          ls -l {{ userhome }}/Applications
+          mv {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox {{ userhome }}/Applications/Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
+          ls -l 
+          ls -l {{ userhome }}/Applications
+          rmdir {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}
         creates: "Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
