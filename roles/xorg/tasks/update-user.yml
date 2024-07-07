@@ -11,3 +11,23 @@
     groups: wheel,storage
     append: yes
   when: zsh_bin.stat.exists
+- name: config zsh
+  become: yes
+  become_user: "{{ user }}"
+  when: zsh_bin.stat.exists
+  block:
+    - name: Check if zsh exists
+      stat:
+        path: "{{ userhome }}/.zshrc"
+      register: zshrc
+    - name: remove .zshrc
+      file:
+        dest: "{{ userhome }}/.zshrc"
+        state: absent
+      when: not ( zshrc.stat.islnk is defined and zshrc.stat.islnk )
+    - name: link .zshrc
+      file:
+        src: "{{ dot_files }}/home/.zshrc"
+        dest: "{{ userhome }}/.zshrc"
+        state: link
+      when: not ( zshrc.stat.islnk is defined and zshrc.stat.islnk )
