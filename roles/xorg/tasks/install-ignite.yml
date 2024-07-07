@@ -7,6 +7,6 @@
       sudo mv ignite /usr/local/bin/
     executable: /bin/bash
   args:
-    chdir: "{{ userhome }}"
+#    chdir: "{{ userhome }}"
     creates: "/usr/local/bin/ignite"
   tags: [ 'never','ignite' ]
