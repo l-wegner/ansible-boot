@@ -60,9 +60,16 @@
         line: "autoload -Uz compinit && compinit"
         insertafter: "^fpath"
         create: yes
-    - name: link asdf .tool-versions
+    - name: link asdf .tool-versions (Arch)
+      when: ansible_distribution in [ 'Arch', 'Archlinux' ]
       file:
         src: "{{ dot_files }}/home/.tool-versions"
+        dest: "{{ userhome }}/.tool-versions"
+        state: link
+    - name: link asdf .tool-versions (Ubuntu)
+      when: ansible_distribution in [ 'Ubuntu' ]
+      file:
+        src: "{{ dot_files }}/home/.tool-versions_ubuntu"
         dest: "{{ userhome }}/.tool-versions"
         state: link
     - name: install asdf plugins
