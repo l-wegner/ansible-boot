@@ -29,18 +29,12 @@
       get_url:
         url: "https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ jetbrains_toolbox_version }}.tar.gz"
         dest: "{{ tar_file }}"
-    - name: unpak toolbox
-      unarchive:
-        src: "{{ tar_file }}"
-        dest: "/home/{{ user }}/Applications/"
-    - name: remove toolbox tar
-      file:
-        path: "{{ tar_file }}"
-        state: absent
     - name: move app image
       shell:
         chdir: "{{ userhome }}/Applications/"
         cmd: |
+          tar -xf {{ tar_file }} -C {{ userhome  }}/Applications 
+          rm {{ tar_file }}
           mv jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
           rmdir jetbrains-toolbox-{{ jetbrains_toolbox_version}}
         creates: "Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
