@@ -26,8 +26,16 @@
 - name: install amd
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
   debug:
-    msg: gpulookup.stdout_lines
+    msg:   "{{ gpulookup.stdout_lines }}"
 
+# mesa
+# lib32-mesa
+# vulkan-radeon
+# lib32-vulkan-radeon
+# libva-mesa-driver
+# lib32-libva-mesa-driver
+# mesa-vdpau
+# lib32-mesa-vdpau
 - name: install xmonad
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
 
