@@ -5,7 +5,6 @@
 
 - name: install nvidia
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'NVIDIA' in gpulookup.stdout_lines
-  tags: [ 'never', 'nvidia' ]
   vars:
     distro_packages:
       'Arch':
@@ -25,8 +24,7 @@
       - "{{ distro_packages[ansible_distribution]['vulkan32'] | default ('') }}"  # 32bit vulkan driver
 
 - name: install amd
-  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'AMD' in gpulookup.stdout_lines
-  tags: [ 'never', 'amd' ]
+  when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ] and 'AMD/ATI' in gpulookup.stdout_lines
   debug:
     msg: "TODO install AMD drivers"
 
