@@ -28,6 +28,7 @@
       - lazygit
     state: present
   when: ansible_distribution in [ 'Archlinux' ]
+  # todo configure .gitconfig
 
 - name: Build Git credential helper from libsecret sources
   become: true
