@@ -34,15 +34,15 @@
         chdir: "{{ userhome }}/"
         cmd: |
           mkdir -p {{ userhome }}/Applications 
-          ls -l
-          tar -xf {{ tar_file }} -C {{ userhome }}/Applications 
-          ls -l
-          ls -l {{ userhome }}/Applications
-          rm {{ tar_file }}
-          ls -l 
-          ls -l {{ userhome }}/Applications
-          mv {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox {{ userhome }}/Applications/Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
-          ls -l 
-          ls -l {{ userhome }}/Applications
-          rmdir {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}
+#          ls -l
+#          tar -xf {{ tar_file }} -C {{ userhome }}/Applications
+#          ls -l
+#          ls -l {{ userhome }}/Applications
+#          rm {{ tar_file }}
+#          ls -l
+#          ls -l {{ userhome }}/Applications
+#          mv {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox {{ userhome }}/Applications/Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
+#          ls -l
+#          ls -l {{ userhome }}/Applications
+#          rmdir {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}
         creates: "Jetbrains-toolbox-{{ jetbrains_toolbox_version }}"
