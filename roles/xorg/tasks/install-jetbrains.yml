@@ -34,7 +34,7 @@
         chdir: "{{ userhome }}/"
         cmd: |
           mkdir -p {{ userhome }}/Applications
-          chmod u=w {{ userhome }}/Applications
+          chmod u+w {{ userhome }}/Applications
           tar -xf {{ tar_file }} -C {{ userhome }}/Applications
           rm {{ tar_file }}
           mv {{ userhome }}/Applications/jetbrains-toolbox-{{ jetbrains_toolbox_version}}/jetbrains-toolbox {{ userhome }}/Applications/Jetbrains-toolbox-{{ jetbrains_toolbox_version }}
