@@ -12,29 +12,32 @@
             packages: ['python', 'python-pip', 'python-virtualenv']
 
     - name: Install Python and pip
-      become: yes
+      become: true
       package:
         name: "{{ python_packages[ansible_distribution]['packages'] }}"
         state: present
       when: ansible_distribution in python_packages
 
     - name: Create virtual environment
-      become: yes
+      become: true
       become_user: "{{ package_user }}"
       command: "{{ python_packages[ansible_distribution]['interpreter'] }} -m venv {{ venv_path }}"
       args:
         creates: "{{ venv_path }}"
 
     - name: "Install {{ package_name }}"
-      become: yes
+      become: true
       become_user: "{{ package_user }}"
       pip:
         name: "{{ package_name }}"
         executable: "{{ venv_path }}/bin/pip"
         state: present
-    - name: "{{ package_name }} bin"
+    - name: "Add {{ package_name }} bin"
+      become: true
+      owner: "{{ package_user }}"
+      group: "{{ package_user }}"
       lineinfile:
-        path: "/home/{{ user }}/.profile"
+        path: "/home/{{ package_user }}/.profile"
         line: "{{ item.line }}"
         create: true
       loop:
