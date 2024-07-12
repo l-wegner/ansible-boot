@@ -23,6 +23,7 @@
       - yt-dlp
       - nnn
       - zsh
+      - fzf
       - rsync
       - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
       - tmux

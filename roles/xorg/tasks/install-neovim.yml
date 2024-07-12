@@ -22,7 +22,7 @@
       vars:
         rust_user: "app_builder"
       import_tasks: install-rustup.yml
-    - name: install ripgrep (ubuntu)
+    - name: clone ripgrep (ubuntu)
       become: yes
       become_user: "app_builder"
       git:
@@ -72,4 +72,18 @@
   file:
     src: "{{ dot_files }}/home/.config/nvim/lua"
     dest: "{{ userhome }}/.config/nvim/lua"
+    state: link
+- name: link nvchad
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "{{ dot_files }}/home/.config/nvchad"
+    dest: "{{ userhome }}/.config/nvchad"
+    state: link
+- name: link lazyvim
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "{{ dot_files }}/home/.config/lazyvim"
+    dest: "{{ userhome }}/.config/lazyvim"
     state: link
