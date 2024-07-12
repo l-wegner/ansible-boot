@@ -1,5 +1,8 @@
 - name: config tmux
   block:
+    - shell: |
+        ls -la {{ dot_files }}/home/.tmux.conf 
+        ls -la {{ userhome }}/.tmux.conf
     - name: link .tmux.conf
       when: ansible_distribution in ['Arch', 'Archlinux', 'Ubuntu']
       file:
