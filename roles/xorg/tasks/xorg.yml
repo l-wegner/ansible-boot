@@ -214,3 +214,6 @@
 
   - name: install tmux
     import_tasks: user-cfg-tmux.yml
+
+  - name: config git
+    import_tasks: user-cfg-git.yml

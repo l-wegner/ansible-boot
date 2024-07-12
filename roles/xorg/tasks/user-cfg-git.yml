@@ -1,0 +1,14 @@
+- name: init git email
+  become: yes
+  become_user: "{{ user }}"
+  git_config:
+    name: "{{ item.name }}"
+    scope: "{{ item.scope }}"
+    value: "{{ item.value }}"
+  with_items:
+#    - { name: "user.email", value: "{{ git_email }}", scope: global }
+#    - { name: "user.name", value: "{{ git_user }}", scope: global }
+    - { name: "core.autocrlf", value: "input", scope: global }
+    - { name: "core.editor", value: "vi", scope: global }
+    - { name: "color.ui", value: "auto", scope: global }
+
