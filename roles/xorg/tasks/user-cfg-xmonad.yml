@@ -10,6 +10,11 @@
         src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
         dest: "{{ xmonad_config_dir }}/xmonad.hs"
         state: link
+    - name: link ~/.xmonad/build from dotfiles
+      file:
+        src: "{{ dot_files }}/home/.xmonad/build"
+        dest: "{{ xmonad_config_dir }}/build"
+        state: link
     - name: change config folder path to XDG_HOME_CONFIG folder (ubuntu)
       when: ansible_distribution in [ 'Ubuntu' ]
       replace:

@@ -1,4 +1,4 @@
-- name: install joplin
+- name: install ghcup
   become: yes
   become_user: "{{ user }}"
   block:
