@@ -42,6 +42,8 @@
         become_user: "{{ user }}"
         shell: |
           cargo install --locked bacon
+        args:
+          creates: "{{ userhome }}/.cargo/bin/bacon"
 
 
   - name: install haskell
