@@ -1,0 +1,6 @@
+- name: install joplin
+  become: yes
+  become_user: "{{ user }}"
+  block:
+    - shell: |
+        curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
