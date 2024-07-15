@@ -30,9 +30,17 @@
 
 - name: add sshd packages
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  vars:
+    distro_packages:
+      'Arch':
+        ssh_server: "openssh"
+      'Archlinux':
+        ssh_server: "openssh"
+      'Ubuntu':
+        ssh_server: "openssh-server"
   package:
     name:
-      - openssh
+      - "{{ distro_packages[ansible_distribution]['ssh_server'] | default ('') }}"
       - sshpass
 
 
