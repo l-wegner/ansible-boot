@@ -19,9 +19,19 @@
   include_tasks: with-paru-install-app-image-launcher.yml
   when: ansible_distribution in [ 'Arch', 'Archlinux' ]
 
-- name: link appimagelauncher.cfg
+- name: link appimagelauncher.cfg (Ubuntu)
   become: true
   become_user: "{{ user }}"
+  when: ansible_distribution in ['Ubuntu']
+  file:
+    src: "{{ dot_files }}/home/.config/appimagelauncher.cfg_ubuntu"
+    dest: "{{ userhome }}/.config/appimagelauncher.cfg"
+    state: link
+
+- name: link appimagelauncher.cfg (Arch)
+  become: true
+  become_user: "{{ user }}"
+  when: ansible_distribution in ['Arch', 'Archlinux']
   file:
     src: "{{ dot_files }}/home/.config/appimagelauncher.cfg"
     dest: "{{ userhome }}/.config/appimagelauncher.cfg"
