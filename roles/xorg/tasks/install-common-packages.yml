@@ -4,15 +4,18 @@
     distro_packages:
       'Arch':
         wallpaper: 'archlinux-wallpaper'
+        dust: 'dust'
       'Archlinux':
         wake_on_lan: 'wol'
         base_devel: 'base-devel'
         btop: 'btop'
+        dust: 'dust'
       'Ubuntu':
         wake_on_lan: 'wakeonlan'
         base_devel: 'build-essential'
 #        fixme falling back to htop
         btop: 'htop'
+        dust: 'du-dust'
   package:
     name:
       - curl
@@ -27,7 +30,7 @@
       - rsync
       - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
       - tmux
-      - dust
+      - "{{ distro_packages[ansible_distribution]['dust'] | default ('') }}"
 
 - name: add /usr/local/bin to path
   become: true
