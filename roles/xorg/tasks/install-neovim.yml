@@ -45,6 +45,8 @@
         chdir: "/tmp/ripgrep"
         creates: "/tmp/ripgrep/target/release/rg"
     - name: Copy a new "ripgrep" file into place, backing up the original ripgrep
+      become: yes
+      become_user: "{{ user }}"
       ansible.builtin.copy:
         src: /tmp/ripgrep/target/release/rg
         dest: "{{ userhome }}/.local/bin/rg"
