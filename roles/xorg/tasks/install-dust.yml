@@ -1,0 +1,9 @@
+- name: install dust
+  when: ansible_distribution in ['Arch','Archlinux', 'Ubuntu']
+  become: true
+  become_user: "{{ user }}"
+  shell: |
+    export PATH="{{ userhome }}/.cargo/bin:$PATH"
+    cargo install du-dust
+  args:
+    creates: "{{ userhome }}/.cargo/bin/dust"

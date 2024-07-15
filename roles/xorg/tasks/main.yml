@@ -41,10 +41,13 @@
         become: true
         become_user: "{{ user }}"
         shell: |
+          export PATH="{{ userhome }}/.cargo/bin:$PATH"
           cargo install --locked bacon
         args:
           creates: "{{ userhome }}/.cargo/bin/bacon"
 
+  - name: install du-dust
+    import_tasks: install-dust.yml
 
   - name: install haskell
     block:
