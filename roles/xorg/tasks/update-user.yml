@@ -8,7 +8,7 @@
     name: "{{ user }}"
     shell: /usr/bin/zsh
 # FIXME wheel is not on every system, do I need storage?
-    groups: wheel,storage
+    groups: "{{ sudo_group }},storage"
     append: yes
   when: zsh_bin.stat.exists
 - name: config zsh

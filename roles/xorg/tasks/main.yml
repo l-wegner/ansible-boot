@@ -1,6 +1,7 @@
 - vars:
     user: "{{ lookup('env','USER_NM') }}"
     new_ansible_user: "{{ lookup('env','TOOR_NM') }}"
+    sudo_group: "{{ lookup('env','SUDO_GROUP') }}"
     dot_files: "/home/{{ user }}/dotfiles"
     userhome: "/home/{{ user }}"
   block:
