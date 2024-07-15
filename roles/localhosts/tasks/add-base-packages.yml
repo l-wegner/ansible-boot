@@ -46,15 +46,31 @@
 
 - name: enable NetworkManager.service
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  vars:
+    service_names:
+      'Arch':
+        network_manager: "NetworkManager.service"
+      'Archlinux':
+        network_manager: "NetworkManager.service"
+      'Ubuntu':
+        network_manager: "NetworkManager.service"
   systemd:
-    name: NetworkManager.service
+    name: "{{ service_names[ansible_distribution]['network_manager'] | default ('') }}"
     state: started
     enabled: true
 
 - name: enable sshd.service
   when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
+  vars:
+    service_names:
+      'Arch':
+        ssh_server: "sshd.service"
+      'Archlinux':
+        ssh_server: "sshd.service"
+      'Ubuntu':
+        ssh_server: "ssh.service"
   systemd:
-    name: sshd.service
+    name: "{{ service_names[ansible_distribution]['ssh_server'] | default ('') }}"
     state: started
     enabled: true
   tags: [ 'never','sshd' ]
