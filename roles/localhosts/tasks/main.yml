@@ -7,6 +7,7 @@
     new_ansible_user: "{{ lookup('env','TOOR_NM') }}"
     ansible_pw_set: "{{ lookup('ansible.builtin.env','TOOR_PW_HASH')|length>0 }}"
     ansible_gid: "{{ lookup('ansible.builtin.env','TOOR_UID', default='1001') | int }}"
+    sudo_group: "{{ lookup('ansible.builtin.env','SUDO_GROUP', default='wheel') }}"
   become: yes
   block:
   - name: query

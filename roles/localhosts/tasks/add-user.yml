@@ -49,7 +49,7 @@
     ssh_key_type: "ed25519"
     # FIXME some systems use %sudo instead of %wheel for sudo group
     groups:
-      - 'wheel'
+      - "{{ sudo_group }}"
 
 - name: "clone dotfiles for {{ user }}"
   import_tasks: clone-dotfiles.yml
