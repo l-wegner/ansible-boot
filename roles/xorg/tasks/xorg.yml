@@ -103,6 +103,8 @@
       # debug x events
       - "{{ distro_packages[ansible_distribution]['xev'] | default ('') }}"
       - screenkey
+      - gimp
+      - blender
   register: install_packages_result
 #  changed_when:  install_packages_result.packages | length > 0
 
