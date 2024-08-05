@@ -13,16 +13,6 @@
           sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
           git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
       when: not oh_my_zsh.stat.exists or oh_my_zsh.stat.isdir is not sameas true
-    - name: Enable Oh-My-Zsh plugins
-      shell: "/usr/bin/zsh -c 'source {{ userhome }}/.oh-my-zsh/oh-my-zsh.sh; omz plugin enable {{ item }}'"
-      with_items:
-        - git
-        - asdf
-        - per-directory-history
-        #- kube-ps1
-        - colored-man-pages
-        #- vi-mode
-      when: not oh_my_zsh.stat.exists or oh_my_zsh.stat.isdir is not sameas true
     - name: Set Oh-My-Zsh theme
       shell: "/usr/bin/zsh -c 'source {{ userhome }}/.oh-my-zsh/oh-my-zsh.sh; omz theme set powerlevel10k/powerlevel10k'"
       when: not oh_my_zsh.stat.exists or oh_stat.isdir is not sameas true
