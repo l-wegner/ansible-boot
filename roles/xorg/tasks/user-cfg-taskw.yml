@@ -1,0 +1,7 @@
+- name: config taskwarrior
+  block:
+    - name: link taskwarrior config
+      file:
+        src: "{{ dot_files }}/home/.taskrc"
+        dest: "{{ userhome }}/.taskrc"
+        state: link
