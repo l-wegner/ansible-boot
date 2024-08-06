@@ -8,11 +8,13 @@
         wake_on_lan: 'wol'
         base_devel: 'base-devel'
         btop: 'btop'
+        taskwarrior: 'task'
       'Ubuntu':
         wake_on_lan: 'wakeonlan'
         base_devel: 'build-essential'
 #        fixme falling back to htop
         btop: 'htop'
+        taskwarrior: 'taskwarrior'
   package:
     name:
       - curl
@@ -27,6 +29,7 @@
       - rsync
       - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
       - tmux
+      - "{{ distro_packages[ansible_distribution]['taskwarrior'] | default ('') }}"
 
 - name: add /usr/local/bin to path
   become: true
