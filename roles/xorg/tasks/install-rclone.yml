@@ -1,11 +1,13 @@
 - name: Download rclone source code
   become: yes
+  become_user: "app_builder"
   git:
     repo: "https://github.com/rclone/rclone.git"
     dest: "/tmp/rclone"
 
 - name: Build rclone from source
   become: yes
+  become_user: "app_builder"
   command: make
   args:
     chdir: /tmp/rclone
@@ -15,6 +17,7 @@
 
 - name: Install rclone
   become: yes
+  become_user: "app_builder"
   command: make install
   args:
     chdir: /tmp/rclone
