@@ -1,0 +1,23 @@
+- name: Download rclone source code
+  become: yes
+  git:
+    repo: "https://github.com/rclone/rclone.git"
+    dest: "/tmp/rclone"
+
+- name: Build rclone from source
+  become: yes
+  command: make
+  args:
+    chdir: /tmp/rclone
+  environment:
+    GOPATH: /usr/local/go
+    PATH: $GOPATH/bin:$PATH
+
+- name: Install rclone
+  become: yes
+  command: make install
+  args:
+    chdir: /tmp/rclone
+  environment:
+    GOPATH: /usr/local/go
+    PATH: $GOPATH/bin:$PATH
