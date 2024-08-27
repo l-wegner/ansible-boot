@@ -221,4 +221,4 @@
     import_tasks: user-cfg-git.yml
 
   - name: config taskwarrior
-    import_tasks: user-cfg-taskwarrior.yml
+    import_tasks: user-cfg-taskw.yml
