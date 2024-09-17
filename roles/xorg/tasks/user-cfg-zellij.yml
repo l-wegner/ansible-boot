@@ -1,0 +1,7 @@
+- name: config zellij
+  block:
+    - name: link zellij config
+      file:
+        src: "{{ dot_files }}/home/.config/zellij"
+        dest: "{{ userhome }}/.config/zellij"
+        state: link

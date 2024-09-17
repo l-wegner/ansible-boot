@@ -93,6 +93,8 @@
   - name: install neovim
     import_tasks: install-neovim.yml
 
+  - name: install zellij
+    import_tasks: install-zellij.yml
 
   - name: install keepassx
     import_tasks: install-keepassxc.yml

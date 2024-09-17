@@ -1,0 +1,25 @@
+- name: Install alacritty (Arch)
+  when: ansible_distribution in ['Arch', 'Archlinux']
+  package:
+    update_cache: true
+    name:
+      - alacritty
+  register: install_alacritty_result
+  changed_when:  install_alacritty_result.packages | length > 0
+
+- name: Install alacritty (Ubuntu 20.04)
+  when: ansible_distribution in ['Arch', 'Archlinux', 'Ubuntu']
+  block:
+    - name: "install rustup for {{ user }}"
+      vars:
+        rust_user: "{{ user }}"
+      import_tasks: install-rustup.yml
+
+    - name: install zellij 
+      become: yes
+      become_user: "{{ user }}"
+      shell: |
+        export PATH="/home/{{ user }}/.cargo/bin:$PATH"
+        cargo install --locked zellij
+
+
