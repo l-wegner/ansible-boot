@@ -78,9 +78,9 @@
     block:
       - import_tasks: install-asdf.yml
 
-  - name: install rclone
-    import_tasks: install-rclone.yml
-
+#  - name: install rclone
+#    import_tasks: install-rclone.yml
+#
   - name: install abcde
     import_tasks: install-abcde.yml
 
