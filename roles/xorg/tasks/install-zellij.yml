@@ -1,5 +1,6 @@
 - name: Install alacritty (Arch)
   when: ansible_distribution in ['Arch', 'Archlinux']
+  become: yes
   package:
     update_cache: true
     name:
