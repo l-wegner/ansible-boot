@@ -223,5 +223,5 @@
   - name: config taskwarrior
     import_tasks: user-cfg-taskw.yml
 
-#  - name: config zellij
-#    import_tasks: user-cfg-zellij.yml
+  - name: config zellij
+    import_tasks: user-cfg-zellij.yml
