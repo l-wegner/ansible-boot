@@ -214,7 +214,7 @@
     when: ansible_distribution in [ 'Arch', 'Archlinux' ]
     import_tasks: user-cfg-dunst.yml
 
-  - name: install tmux
+  - name: config tmux
     import_tasks: user-cfg-tmux.yml
 
   - name: config git

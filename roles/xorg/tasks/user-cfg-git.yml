@@ -12,3 +12,11 @@
     - { name: "core.editor", value: "vi", scope: global }
     - { name: "color.ui", value: "auto", scope: global }
 
+- name: config lazygit
+  block:
+    - name: link lazyig config
+      file:
+        src: "{{ dot_files }}/home/.config/lazygit"
+        dest: "{{ userhome }}/.config/lazygit"
+        state: link
+
