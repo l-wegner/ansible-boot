@@ -5,6 +5,8 @@
     name:
       - neovim
       - ripgrep
+      - fzf
+      - fd
 - name: install neowim (ubuntu)
   when: ansible_distribution in [ 'Ubuntu' ]
   block:
@@ -18,6 +20,11 @@
           sudo ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim
         executable: /bin/bash
         creates: /usr/bin/nvim
+    - name: install telescope dependencies
+      package:
+        name:
+          - fzf
+          - fd-find
     - name: install rustup for app_builder
       vars:
         rust_user: "app_builder"
@@ -74,6 +81,13 @@
   file:
     src: "{{ dot_files }}/home/.config/nvim/lua"
     dest: "{{ userhome }}/.config/nvim/lua"
+    state: link
+- name: link neovim after/
+  become: true
+  become_user: "{{ user }}"
+  file:
+    src: "{{ dot_files }}/home/.config/nvim/after"
+    dest: "{{ userhome }}/.config/nvim/after"
     state: link
 - name: link nvchad
   become: true
