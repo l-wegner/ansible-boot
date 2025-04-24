@@ -84,7 +84,6 @@
   - name: install abcde
     import_tasks: install-abcde.yml
 
-
   - name: install helix
     import_tasks: install-helix.yml
 
@@ -100,5 +99,6 @@
   - name: install jupyter notebook
     import_tasks: install-jupyter-notebook.yml
 
-  - name: install ignite
-    import_tasks: install-ignite.yml
+# - name: install ignite
+#   import_tasks: install-ignite.yml
+
