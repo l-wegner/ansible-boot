@@ -22,7 +22,6 @@
       package:
         name:
           - libfuse2
-          - fuse
           - fontconfig
           - tar
     - name: download toolbox

@@ -9,4 +9,16 @@
         src: "{{ dot_files }}/home/.config/dunst/dunstrc"
         dest: "{{ userhome }}/.config/dunst/dunstrc"
         state: link
+  - name: Ensure D-Bus service for dunst is configured
+    when: ansible_distribution in ['Ubuntu' ]
+    become: true
+    copy:
+      dest: /usr/share/dbus-1/services/org.freedesktop.Notifications.service
+      content: |
+        [D-BUS Service]
+        Name=org.freedesktop.Notifications
+        Exec=/usr/bin/dunst
+      owner: root
+      group: root
+      mode: '0644'
 

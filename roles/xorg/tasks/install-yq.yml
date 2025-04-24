@@ -1,15 +1,7 @@
 - name: install yq (Arch)
   become: true
-  when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+  when: ansible_distribution in [ 'Arch', 'Archlinux', 'Ubuntu' ]
   package:
     name:
       - yq
 
-- name: install yq (Ubuntu)
-  become: true
-  when: ansible_distribution in [ 'Ubuntu' ]
-  debug:
-    msg: "yq is not available in the Ubuntu repositories. Please install it manually."
-#  package:
-#      name:
-#      - yq

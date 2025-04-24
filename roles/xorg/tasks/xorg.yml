@@ -65,7 +65,7 @@
         xmonad_contrib: 'libghc-xmonad-contrib-dev'
         compositor: 'compton'
         xorg: 'xorg'
-        notify_daemon: 'gnome-shell-extension-appindicator'
+        notify_daemon: 'dunst'
         alsa_pulse_bridge: 'libasound2'
         xev: 'x11-utils'
   package:
@@ -94,10 +94,11 @@
       - "{{ distro_packages[ansible_distribution]['wallpaper'] | default ('') }}"  # wallpapers
       # networkmanager tray icon
       - "{{ distro_packages[ansible_distribution]['nm_applet'] | default ('') }}"
-      - pasystray # pulse audio tray icon
-      - pavucontrol # pulse audio volume control
-      - pulseaudio
-      - "{{ distro_packages[ansible_distribution]['alsa_pulse_bridge'] | default ('') }}"
+      #TODO setup pipewire related functionality
+        #      - pasystray # pulse audio tray icon
+        #      - pavucontrol # pulse audio volume control
+        #      - pulseaudio
+        #      - "{{ distro_packages[ansible_distribution]['alsa_pulse_bridge'] | default ('') }}"
       - firefox
       - trayer # system tray
       # debug x events
@@ -126,7 +127,7 @@
 - name: config lxdm
   import_tasks: config-lxdm.yml
 
-- name: isntall thunar
+- name: install thunar
   import_tasks: install-thunar.yml
 
 #- name: Set changed condition based on package manager
@@ -196,7 +197,7 @@
 
   - name: config xmonad (ubuntu)
     vars:
-      xmonad_config_dir: "{{ userhome }}/.xmonad"
+      xmonad_config_dir: "{{ userhome }}/.config/xmonad"
     when: ansible_distribution in [ 'Ubuntu' ]
     import_tasks: user-cfg-xmonad.yml
 

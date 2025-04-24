@@ -82,8 +82,10 @@
         - { plugin: maven, url: "https://github.com/halcyon/asdf-maven.git" }
         - { plugin: java, url: "https://github.com/halcyon/asdf-java.git" }
         - { plugin: yq, url: "https://github.com/sudermanjr/asdf-yq.git" }
+        - { plugin: python, url: "https://github.com/asdf-community/asdf-python" }
     - name: install asdf tools
       when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
       command: asdf install
       environment:
         PATH: "{{ asdf_dir }}/bin:{{ ansible_env.PATH }}"
+

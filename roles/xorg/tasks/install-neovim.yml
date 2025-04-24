@@ -25,42 +25,7 @@
         name:
           - fzf
           - fd-find
-    - name: install rustup for app_builder
-      vars:
-        rust_user: "app_builder"
-      import_tasks: install-rustup.yml
-    - name: clone ripgrep (ubuntu)
-      become: yes
-      become_user: "app_builder"
-      git:
-        repo: "https://github.com/BurntSushi/ripgrep"
-        dest: "/tmp/ripgrep"
-        clone: yes
-      register: ripgrep_repo
-#    - name: delete old ripgrep version
-#      when: ripgrep_repo.
-#      file:
-#        path: "/tmp/ripgrep/target/release/rg"
-#        state: absent
-    - name: build ripgrep (ubuntu)
-      become: yes
-      become_user: "app_builder"
-      shell: |
-        export PATH="/home/app_builder/.cargo/bin:$PATH"
-        cargo build --release
-      args:
-        chdir: "/tmp/ripgrep"
-        creates: "/tmp/ripgrep/target/release/rg"
-    - name: Copy a new "ripgrep" file into place, backing up the original ripgrep
-      become: yes
-      become_user: "{{ user }}"
-      ansible.builtin.copy:
-        src: /tmp/ripgrep/target/release/rg
-        dest: "{{ userhome }}/.local/bin/rg"
-        owner: "{{ user }}"
-        group: "{{ user }}"
-        mode: '0755'
-        backup: yes
+          - ripgrep
 
 - name: create ~/.config/nvim
   become: true

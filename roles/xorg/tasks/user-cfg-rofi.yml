@@ -4,14 +4,8 @@
       file:
         path: "{{ userhome }}/.config/rofi"
         state: directory
-    - name: link rofi config (ubuntu)
-      when: ansible_distribution not in [ 'Arch','Archlinux']
-      file: 
-        src: "{{ dot_files }}/home/.config/rofi/config_ubuntu.rasi"
-        dest: "{{ userhome }}/.config/rofi/config.rasi"
-        state: link
-    - name: link rofi config (arch)
-      when: ansible_distribution in [ 'Arch','Archlinux']
+    - name: link rofi config,
+      when: ansible_distribution in [ 'Arch', 'Archlinux', 'Ubuntu' ]
       file:
         src: "{{ dot_files }}/home/.config/rofi/config.rasi"
         dest: "{{ userhome }}/.config/rofi/config.rasi"

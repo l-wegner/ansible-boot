@@ -12,8 +12,7 @@
       'Ubuntu':
         wake_on_lan: 'wakeonlan'
         base_devel: 'build-essential'
-#        fixme falling back to htop
-        btop: 'htop'
+        btop: 'btop'
         taskwarrior: 'taskwarrior'
   package:
     name:
