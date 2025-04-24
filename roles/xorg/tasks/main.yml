@@ -84,8 +84,6 @@
   - name: install abcde
     import_tasks: install-abcde.yml
 
-  - name: install ansible lsp
-    import_tasks: install-ansible-lsp.yml
 
   - name: install helix
     import_tasks: install-helix.yml
