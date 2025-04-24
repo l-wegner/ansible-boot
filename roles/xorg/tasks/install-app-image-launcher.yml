@@ -1,18 +1,20 @@
-- name: install appimagelauncher (Ubuntu)
-  become: yes
-  block:
-    - name: Add appimagelauncher ppa
-      apt_repository:
-        repo: ppa:appimagelauncher-team/stable
-        state: present
-    - name: apt update
-      apt:
-        update_cache: true
-      changed_when: false
-    - name: install appimagelauncher
-      package:
-        name: appimagelauncher
-  when: ansible_distribution == 'Ubuntu'
+
+# fix for Ubuntu 24.04
+# - name: install appimagelauncher (Ubuntu)
+#   become: yes
+#   block:
+#     - name: Add appimagelauncher ppa
+#       apt_repository:
+#         repo: ppa:appimagelauncher-team/stable
+#         state: present
+#     - name: apt update
+#       apt:
+#         update_cache: true
+#       changed_when: false
+#     - name: install appimagelauncher
+#       package:
+#         name: appimagelauncher
+#   when: ansible_distribution == 'Ubuntu'
 
 - name: install appimagelauncher using kewlfft.aur collection (Arch)
   tags: [ 'aur']
