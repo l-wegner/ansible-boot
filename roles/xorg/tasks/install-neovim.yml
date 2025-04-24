@@ -9,15 +9,16 @@
       - fd
 - name: install neowim (ubuntu)
   when: ansible_distribution in [ 'Ubuntu' ]
+  become: yes
   block:
     - name: install neovim
       shell:
         cmd: |
-          curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-          sudo rm -rf /opt/nvim
-          sudo rm /usr/bin/nvim
-          sudo tar -C /opt -xzf nvim-linux64.tar.gz
-          sudo ln -s /opt/nvim-linux64/bin/nvim /usr/bin/nvim
+          sudo rm -rf /opt/nvim-linux-x86_64
+          sudo rm /usr/bin/nvim-linux-x86_64
+          curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz && \
+          sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+          sudo ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/bin/nvim
         executable: /bin/bash
         creates: /usr/bin/nvim
     - name: install telescope dependencies
