@@ -6,6 +6,11 @@
         name: localhosts
       tags:
         - workstation
+    - name: Import role workstation
+      import_role:
+        name: workstation
+      tags:
+        - workstation
     - name: Import role xorg
       import_role:
         name: xorg

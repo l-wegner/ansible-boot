@@ -1,0 +1,12 @@
+- vars:
+    user: "{{ lookup('env','USER_NM') }}"
+    new_ansible_user: "{{ lookup('env','TOOR_NM') }}"
+    sudo_group: "{{ lookup('env','SUDO_GROUP') }}"
+    dot_files: "/home/{{ user }}/dotfiles"
+    userhome: "/home/{{ user }}"
+  block:
+  - name: install common packages
+    import_tasks: install-common-packages.yml
+
+  - name: install docker
+    import_tasks: install-docker.yml

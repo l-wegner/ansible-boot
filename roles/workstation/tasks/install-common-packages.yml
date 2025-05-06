@@ -1,0 +1,39 @@
+- name: install common packages
+  become: true
+  vars:
+    distro_packages:
+      'Arch':
+        wallpaper: 'archlinux-wallpaper'
+      'Archlinux':
+        wake_on_lan: 'wol'
+        base_devel: 'base-devel'
+        btop: 'btop'
+        taskwarrior: 'task'
+      'Ubuntu':
+        wake_on_lan: 'wakeonlan'
+        base_devel: 'build-essential'
+        btop: 'btop'
+        taskwarrior: 'taskwarrior'
+  package:
+    name:
+      - curl
+      - feh
+      - jq
+      - "{{ distro_packages[ansible_distribution]['btop'] | default ('') }}"
+      - "{{ distro_packages[ansible_distribution]['base_devel'] | default ('') }}"
+      - yt-dlp
+      - nnn
+      - zsh
+      - fzf
+      - rsync
+      - "{{ distro_packages[ansible_distribution]['wake_on_lan'] | default ('') }}"
+      - tmux
+      - "{{ distro_packages[ansible_distribution]['taskwarrior'] | default ('') }}"
+
+- name: add /usr/local/bin to path
+  become: true
+  lineinfile:
+    path: "/etc/profile"
+    line: "export PATH=$PATH:/usr/local/bin"
+
+

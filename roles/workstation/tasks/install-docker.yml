@@ -1,0 +1,51 @@
+- name: Add docker repo (Ubuntu)
+  when: ansible_distribution in [ 'Ubuntu' ]
+  become: yes
+  vars:
+    docker_repo_key: /etc/apt/keyrings/docker.asc
+  block:
+    - name: Download docker gpg key
+      get_url:
+        url: "https://download.docker.com/linux/ubuntu/gpg"
+        dest: "{{ docker_repo_key }}"
+        mode: '0444'
+    - name: Add docker repo 
+      vars:
+        deb_architecture: {
+          "aarch64": "arm64",
+          "x86_64": "amd64"
+        }
+      apt_repository:
+        repo: "deb [ arch={{ [ansible_architecture] | map('extract', deb_architecture) | first }} signed-by={{ docker_repo_key }} ] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        filename: docker.sources
+        state: present
+        update_cache: true
+      changed_when: false
+
+- name: Install docker (Ubuntu)
+  when: ansible_distribution in [ 'Ubuntu' ]
+  become: yes
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+
+- name: Install docker (Arch)
+  when: ansible_distribution in [ 'Arch', 'Archlinux' ]
+  become: yes
+  package:
+    name:
+      - docker
+      - docker-buildx
+      - docker-compose
+
+- name: "Add {{ user }} to docker group"
+  become: yes
+  user:
+    name: "{{ user }}"
+    groups: "docker"
+    append: yes
+  
