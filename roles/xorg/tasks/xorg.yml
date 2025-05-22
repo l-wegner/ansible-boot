@@ -69,7 +69,7 @@
         alsa_pulse_bridge: 'libasound2'
         xev: 'x11-utils'
   package:
-    update_cache: true
+    update_cache: false
     name:
       - "{{ distro_packages[ansible_distribution]['xorg'] | default ('') }}"
       # required for xmonad default config
