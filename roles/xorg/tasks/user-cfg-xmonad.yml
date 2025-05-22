@@ -7,22 +7,27 @@
         state: directory
     - name: "link ~/{{ xmonad_config_dir }}/xmonad.hs from dotfiles"
       file:
-        src: "{{ dot_files }}/home/.xmonad/xmonad.hs"
+        src: "{{ dot_files }}/home/.config/xmonad/xmonad.hs"
         dest: "{{ xmonad_config_dir }}/xmonad.hs"
         state: link
     - name: "link ~/{{ xmonad_config_dir }}/build from dotfiles"
       file:
-        src: "{{ dot_files }}/home/.xmonad/build"
+        src: "{{ dot_files }}/home/.config/xmonad/build"
         dest: "{{ xmonad_config_dir }}/build"
         state: link
-    - name: link keyboard layout script
+    - name: "link ~/{{ xmonad_config_dir }}/switch-kb-layout.sh"
       file:
-        src: "{{ dot_files }}/home/.xmonad/switch-kb-layout.sh"
+        src: "{{ dot_files }}/home/.config/xmonad/switch-kb-layout.sh"
         dest: "{{ xmonad_config_dir }}/switch-kb-layout.sh"
+        state: link
+    - name: "link ~/{{ xmonad_config_dir }}/toggle-vpn.sh"
+      file:
+        src: "{{ dot_files }}/home/.config/xmonad/toggle-vpn.sh"
+        dest: "{{ xmonad_config_dir }}/toggle-vpn.sh"
         state: link
     - name: link MyUtils.hs
       file:
-        src: "{{ dot_files }}/home/.xmonad/lib/MyUtils.hs"
+        src: "{{ dot_files }}/home/.config/xmonad/lib/MyUtils.hs"
         dest: "{{ xmonad_config_dir }}/lib/MyUtils.hs"
         state: link
 
