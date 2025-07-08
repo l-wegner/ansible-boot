@@ -1,33 +1,9 @@
   - name: config xmonad
     when: ansible_distribution in [ 'Ubuntu', 'Arch', 'Archlinux' ]
     block:
-    - name: "create {{ xmonad_config_dir }}/lib"
+    - name: "link {{ xmonad_config_dir }}/ from dotfiles"
       file:
-        path: "{{ xmonad_config_dir }}/lib"
-        state: directory
-    - name: "link ~/{{ xmonad_config_dir }}/xmonad.hs from dotfiles"
-      file:
-        src: "{{ dot_files }}/home/.config/xmonad/xmonad.hs"
-        dest: "{{ xmonad_config_dir }}/xmonad.hs"
-        state: link
-    - name: "link ~/{{ xmonad_config_dir }}/build from dotfiles"
-      file:
-        src: "{{ dot_files }}/home/.config/xmonad/build"
-        dest: "{{ xmonad_config_dir }}/build"
-        state: link
-    - name: "link ~/{{ xmonad_config_dir }}/switch-kb-layout.sh"
-      file:
-        src: "{{ dot_files }}/home/.config/xmonad/switch-kb-layout.sh"
-        dest: "{{ xmonad_config_dir }}/switch-kb-layout.sh"
-        state: link
-    - name: "link ~/{{ xmonad_config_dir }}/toggle-vpn.sh"
-      file:
-        src: "{{ dot_files }}/home/.config/xmonad/toggle-vpn.sh"
-        dest: "{{ xmonad_config_dir }}/toggle-vpn.sh"
-        state: link
-    - name: link MyUtils.hs
-      file:
-        src: "{{ dot_files }}/home/.config/xmonad/lib/MyUtils.hs"
-        dest: "{{ xmonad_config_dir }}/lib/MyUtils.hs"
+        src: "{{ dot_files }}/home/.config/xmonad/`"
+        path: "{{ xmonad_config_dir }}"
         state: link
 
