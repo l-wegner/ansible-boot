@@ -1,0 +1,33 @@
+- vars:
+    user: "{{ lookup('env','USER_NM') }}"
+    new_ansible_user: "{{ lookup('env','TOOR_NM') }}"
+    sudo_group: "{{ lookup('env','SUDO_GROUP') }}"
+    dot_files: "/home/{{ user }}/dotfiles"
+    userhome: "/home/{{ user }}"
+  block:
+  - name: Install taggie dependencies Ubuntu
+    when: ansible_distribution in ['Ubuntu' ]
+    package:
+      update_cache: true
+      name:
+        - libtagc0-dev
+  - name: Install taggie dependencies Arch
+    when: ansible_distribution in ['Arch', 'Archlinux' ]
+    package:
+      update_cache: true
+      name:
+        - taglib
+  - name: install taggie
+    vars:
+      rust_user: "{{ user }}"
+    block:
+      - import_tasks: install-rustup.yml
+      - name: install rust taggie
+        become: true
+        become_user: "{{ user }}"
+        shell: |
+          export PATH="{{ userhome }}/.cargo/bin:$PATH"
+          cargo install --locked taggie
+        args:
+          creates: "{{ userhome }}/.cargo/bin/taggie"
+
