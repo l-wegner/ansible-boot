@@ -11,6 +11,7 @@
     - { name: "core.autocrlf", value: "input", scope: global }
     - { name: "core.editor", value: "vi", scope: global }
     - { name: "color.ui", value: "auto", scope: global }
+    - { name: "commit.gpgsign", value: "true", scope: global }
 
 - name: config lazygit
   block:
