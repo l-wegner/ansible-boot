@@ -189,16 +189,9 @@
     # todo improve config
     import_tasks: user-cfg-rofi.yml
 
-  - name: config xmonad (arch)
+  - name: config xmonad
     vars:
       xmonad_config_dir: "{{ userhome }}/.config/xmonad"
-    when: ansible_distribution in [ 'Arch', 'Archlinux' ]
-    import_tasks: user-cfg-xmonad.yml
-
-  - name: config xmonad (ubuntu)
-    vars:
-      xmonad_config_dir: "{{ userhome }}/.config/xmonad"
-    when: ansible_distribution in [ 'Ubuntu' ]
     import_tasks: user-cfg-xmonad.yml
 
   - name: config xmobar
