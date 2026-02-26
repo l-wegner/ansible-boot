@@ -1,0 +1,71 @@
+- name: Detect OS family
+  set_fact:
+    os_family: "{{ ansible_os_family | lower }}"
+
+- name: Install Ubuntu/Debian build dependencies
+  apt:
+    name:
+      - cmake
+      - libssl-dev
+      - libvips-dev
+      - libsixel-dev
+      - libchafa-dev
+      - libtbb-dev
+      - git
+      - build-essential
+    state: present
+    update_cache: yes
+  when: os_family == "debian"
+
+- name: Install Arch Linux build dependencies
+  pacman:
+    name:
+      - base-devel
+      - cmake
+      - openssl
+      - vips
+      - libsixel
+      - chafa
+      - tbb
+      - git
+    state: present
+    update_cache: yes
+  become: yes
+  when: os_family == "arch"
+
+- name: Clone ueberzugpp repo
+  git:
+    repo: https://github.com/jstkdng/ueberzugpp.git
+    dest: /tmp/ueberzugpp
+    version: master
+
+- name: Create build directory
+  file:
+    path: /tmp/ueberzugpp/build
+    state: directory
+
+- name: Configure ueberzugpp build
+  shell: |
+    cd /tmp/ueberzugpp
+    mkdir -p build && cd build
+    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_X11=ON ..
+  args:
+    creates: /tmp/ueberzugpp/build/CMakeCache.txt
+
+- name: Build ueberzugpp
+  shell: make -j$(nproc)
+  args:
+    chdir: /tmp/ueberzugpp/build
+
+- name: Install ueberzugpp binary
+  copy:
+    src: /tmp/ueberzugpp/build/src/ueberzugpp
+    dest: /usr/local/bin/ueberzugpp
+    mode: '0755'
+    remote_src: yes
+
+- name: Cleanup
+  file:
+    path: /tmp/ueberzugpp
+    state: absent
+

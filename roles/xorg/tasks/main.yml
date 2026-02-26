@@ -30,6 +30,9 @@
   - name: install oh-my-zsh
     import_tasks: install-oh-my-zsh.yml
 
+  - name: install ueberzugpp
+    import_tasks: install-ueberzugpp.yml
+
 
 
   - name: install rust
