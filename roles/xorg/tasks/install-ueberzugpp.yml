@@ -11,10 +11,14 @@
       - libsixel-dev
       - libchafa-dev
       - libtbb-dev
+      - libxcb-image0-dev
+      - libxcb-res0-dev
+      - libopencv-dev
       - git
       - build-essential
     state: present
     update_cache: yes
+  become: true
   when: os_family == "debian"
 
 - name: Install Arch Linux build dependencies
@@ -30,7 +34,7 @@
       - git
     state: present
     update_cache: yes
-  become: yes
+  become: true
   when: os_family == "arch"
 
 - name: Clone ueberzugpp repo
@@ -49,20 +53,31 @@
     cd /tmp/ueberzugpp
     mkdir -p build && cd build
     cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_X11=ON ..
+    rm ueberzugpp
   args:
     creates: /tmp/ueberzugpp/build/CMakeCache.txt
 
 - name: Build ueberzugpp
-  shell: make -j$(nproc)
+  shell: |
+    cmake build .
   args:
     chdir: /tmp/ueberzugpp/build
+    creates: /tmp/ueberzugpp/build/ueberzug
 
 - name: Install ueberzugpp binary
+  become: true
   copy:
-    src: /tmp/ueberzugpp/build/src/ueberzugpp
-    dest: /usr/local/bin/ueberzugpp
+    src: /tmp/ueberzugpp/build/ueberzug
+    dest: /usr/local/bin/ueberzug
     mode: '0755'
     remote_src: yes
+
+- name: Create ueberzug symlink
+  become: true
+  file:
+    src: /usr/local/bin/ueberzug
+    dest: /usr/local/bin/ueberzugpp
+    state: link
 
 - name: Cleanup
   file:
