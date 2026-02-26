@@ -3,7 +3,7 @@
     block:
     - name: "link {{ xmonad_config_dir }}/ from dotfiles"
       file:
-        src: "{{ dot_files }}/home/.config/xmonad/`"
+        src: "{{ dot_files }}/home/.config/xmonad/"
         path: "{{ xmonad_config_dir }}"
         state: link
 
